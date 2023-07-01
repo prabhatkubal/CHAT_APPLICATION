@@ -124,10 +124,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
             ) : null}
             {groupedMessages[date].map((item, index) => (
               <React.Fragment key={index}>
-                {item.recipientId == user_details?.id && (
+                {item.recipientId === user_details?.id && (
                   <ChatBubbleReceived>{item.message}</ChatBubbleReceived>
                 )}
-                {item.senderId == user_details?.id && (
+                {item.senderId === user_details?.id && (
                   <ChatBubbleSent>{item.message}</ChatBubbleSent>
                 )}
               </React.Fragment>

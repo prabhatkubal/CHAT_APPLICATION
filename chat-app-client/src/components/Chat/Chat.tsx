@@ -68,10 +68,12 @@ export default function Chat() {
   // add online users
   useEffect(() => {
     if (socket !== null || "") {
+      console.log(user_details?.id);
       socket.emit("addNewUser", user_details?.id);
 
       socket.on("getOnlineUsers", (data) => {
         setOnlineUsers(data);
+        console.log(data);
       });
     }
   }, [socket]);

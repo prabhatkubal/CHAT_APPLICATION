@@ -185,7 +185,7 @@ const ChatList = ({ onlineUsers, getRecipient, showChatContent }) => {
             >
               <UserListItem
                 user={{ id: item.id.toString(), name: item.name }}
-                isOnline={onlineUsers?.some((user) => user?.userId === item.id)}
+                isOnline={onlineUsers?.some((user) => user?.id === item.id)}
               />
             </ChatListItem>
           ))}

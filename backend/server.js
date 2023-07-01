@@ -47,7 +47,7 @@ function socketioOperations(socket) {
   socket.on("addNewUser", (userId) => {
     !onlineUsers.some((user) => user.id == userId) &&
       onlineUsers.push({
-        userId,
+        id: userId,
         socketId: socket.id,
       });
     console.log("prabhat");
@@ -55,9 +55,10 @@ function socketioOperations(socket) {
     io.emit("getOnlineUsers", onlineUsers);
   });
 
-  console.log(onlineUsers);
+  console.log("onlineUsers", onlineUsers);
 
   socket.on("sendMessage", (message) => {
+    console.log(message.recipientId);
     const user = onlineUsers.find((user) => user.id == message.recipientId);
     console.log("prabhat", user);
 
