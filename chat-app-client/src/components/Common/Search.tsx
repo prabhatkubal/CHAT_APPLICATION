@@ -6,9 +6,9 @@ const StyledSearchInput = styled.input`
   margin-bottom: 10px;
   font-size: 15px;
   border-radius: 5px;
-  border: 2px solid grey;
+  border: 1px solid #d1d1d1;
   padding: 5px 5px;
-  background: #f1f1f1;
+  background: white;
   color:grey;
 
   &:focus {

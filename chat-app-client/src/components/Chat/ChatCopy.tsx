@@ -19,23 +19,23 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState(null);
   const [showChatContent, setShowChatContent] = useState(false);
-  const [recipientId, setRecipientId] = useState(
+  const [recipientid, setRecipientid] = useState(
     selectedRecipient?.id ? selectedRecipient?.id : null
   );
   const [recipient, setRecipient] = useState(
     selectedRecipient ? selectedRecipient : null
   );
 
-  async function getMessagesBySenderAndRecipientId(senderId, recipientId) {
+  async function getMessagesBySenderAndRecipientid(senderid, recipientid) {
     try {
       const response = await apiInstance.get(
-        `http://localhost:4000/messages/${senderId}/${recipientId}`
+        `http://localhost:4000/messages/${senderid}/${recipientid}`
       );
       const data = response.data;
 
       if (data.success) {
         const messages = data.messages;
-        // console.log("Retrieved messages:", messages);
+        console.log("Retrieved messages:", messages);
         setMessages([...messages]);
         // Process the retrieved messages here
       } else {
@@ -48,10 +48,10 @@ export default function Chat() {
 
   //get messages based on chat selected
   useEffect(() => {
-    if (recipientId !== null) {
-      getMessagesBySenderAndRecipientId(user_details?.id, recipientId);
+    if (recipientid !== null) {
+      getMessagesBySenderAndRecipientid(user_details?.id, recipientid);
     }
-  }, [recipientId]);
+  }, [recipientid]);
 
   // socket connection
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function Chat() {
 
   // add online users
   useEffect(() => {
-    if (socket !== null || "") {
+    if (socket !== null) {
       socket.emit("addNewUser", user_details?.id);
 
       socket.on("getOnlineUsers", (data) => {
@@ -83,41 +83,35 @@ export default function Chat() {
         ...prev,
         {
           ...newMessage,
-          recipientId: recipientId,
-          senderId: user_details?.id,
-          chatId: `${recipientId}_${user_details?.id}`,
+          recipientid: recipientid,
+          senderid: user_details?.id,
+          chatid: `${recipientid}_${user_details?.id}`,
         },
       ]);
 
       socket.emit("sendMessage", {
         ...newMessage,
-        recipientId: recipientId,
-        senderId: user_details?.id,
-        chatId: `${recipientId}_${user_details?.id}`,
+        recipientid: recipientid,
+        senderid: user_details?.id,
+        chatid: `${recipientid}_${user_details?.id}`,
       });
 
       socket.on("getOnlineUsers", (data) => {
         setOnlineUsers(data);
       });
-
-      socket.on("getMessage", (res) => {
-        console.log(res);
-        setMessages((prev) => [...prev, res]);
-        // getMessagesBySenderAndRecipientId(user_details?.id, recipientId);
-      });
       // Post message data to the "/messages" API
       apiInstance
         .post("http://localhost:4000/messages", {
-          senderId: user_details?.id,
-          recipientId,
-          chatId: `${recipientId}_${user_details?.id}`,
+          senderid: user_details?.id,
+          recipientid,
+          chatid: `${recipientid}_${user_details?.id}`,
           message: newMessage.message,
           dateTime: new Date().toISOString(),
         })
         .then((response) => {
           if (response.data.success) {
             // console.log("Message inserted successfully:", response.data);
-            // getMessagesBySenderAndrecipientId(user_details?.id, recipientId);
+            // getMessagesBySenderAndRecipientid(user_details?.id, recipientid);
           } else {
             console.error("Failed to insert message:", response.data.error);
           }
@@ -134,7 +128,7 @@ export default function Chat() {
       socket.on("getMessage", (res) => {
         console.log(res);
         setMessages((prev) => [...prev, res]);
-        // getMessagesBySenderAndRecipientId(user_details?.id, recipientId);
+        // getMessagesBySenderAndRecipientid(user_details?.id, recipientid);
       });
 
       return () => {
@@ -159,7 +153,7 @@ export default function Chat() {
 
   const getRecipient = (data, chatStatus) => {
     setRecipient(data);
-    setRecipientId(data.id);
+    setRecipientid(data.id);
     setShowChatContent(chatStatus);
   };
 

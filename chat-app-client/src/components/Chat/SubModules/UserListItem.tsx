@@ -33,6 +33,10 @@ const UserName = styled.div`
   /* Add your styling for the user name */
 `;
 
+const LastOnline = styled.div`
+  display: block;
+`;
+
 const OnlineIdentifier = styled.div<{ isOnline: boolean }>`
   display: ${({ isOnline }) => (isOnline ? "block" : "none")};
   background: lawngreen;
@@ -45,10 +49,17 @@ const OnlineIdentifier = styled.div<{ isOnline: boolean }>`
 `;
 
 const UserListItem: React.FC<UserListItemProps> = ({ user, isOnline }) => {
+  
+  // const selectedUser =
+  //   typeof window !== "undefined"
+  //     ? JSON.parse(localStorage.getItem("selectedUser"))
+  //     : null;
+
   return (
     <UserListItemContainer>
-      <UserIcon>{user.name.charAt(0).toUpperCase()}</UserIcon>
-      <UserName>{user.name}</UserName>
+      <UserIcon>{user?.name?.charAt(0)?.toUpperCase()}</UserIcon>
+      <UserName>{user?.name}</UserName>
+      {/* <LastOnline>Last Online Recently</LastOnline> */}
       <OnlineIdentifier isOnline={isOnline} />
       {/* Render the content for each user list item */}
     </UserListItemContainer>

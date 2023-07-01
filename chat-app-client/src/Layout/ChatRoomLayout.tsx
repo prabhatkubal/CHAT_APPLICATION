@@ -17,7 +17,7 @@ const ChatSidebar = styled.div`
   @media screen and ${device.tablet} {
     border-right: ${({ theme }) => theme.colors.borderRight};
     width: 20%;
-    min-width: 280px;
+    min-width: 370px;
   }
 `;
 

@@ -1,11 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import axios from "axios";
 import styled from "styled-components";
 import Search from "../../Common/Search";
 import HamburgerMenuIcon from "./HamburgerIcon";
 import UserListItem from "./UserListItem";
 import { useToggleTheme } from "../../../theme/themeUtilis";
+import apiInstance from "../../../api/apiInstance";
+
+interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
+  active: boolean;
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const TabContainer = styled.div`
+  display: flex;
+`;
+
+const Tab = styled.div<TabProps>`
+  padding: 0.4rem 0.5rem;
+  background-color: ${(props) => (props.active ? "#f9f9f9" : "#f0f0f0")};
+  color: ${(props) => (props.active ? "#000000" : "#888888")};
+  font-weight: ${(props) => (props.active ? "400" : "400")};
+  border: 1px solid #e0e0e0;
+  border-bottom: ${(props) => (props.active ? "none" : "1px solid #e0e0e0")};
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  margin: 0;
+  user-select: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  width: fit-content;
+
+  &:hover {
+    background-color: #f9f9f9;
+  }
+`;
+
+const EmptyContentTab = styled.div`
+  flex-grow: 1;
+  border-bottom: 1px solid #e0e0e0;
+`;
 
 const ChatListContainer = styled.div`
   padding: 0.5rem 0.5rem;
@@ -15,7 +53,7 @@ const ChatListContainer = styled.div`
 
 const ChatListControls = styled.div`
   display: flex;
-  margin: 0.5rem 0.5rem;
+  margin: 0.5rem 0.5rem 0rem 0.5rem;
 `;
 
 const ChatListItem = styled.div`
@@ -35,19 +73,16 @@ const ChatListItemContainer = styled.div`
   justify-content: space-between;
   flex-direction: column;
   width: 100%;
+  margin-top: 10px;
 `;
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
-const ChatList = ({ onlineUsers, getRecipient }) => {
+const ChatList = ({ onlineUsers, getRecipient, showChatContent }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   // const [theme, setTheme] = useState(null);
   const { toggleTheme } = useToggleTheme();
+  const [activeTab, setActiveTab] = useState("Chat"); // Initialize with the Chat tab
+  const tabNames = ["Chat", "Group Chat", "Blind Chat"]; // Array of all tab names
 
   const user_details =
     typeof window !== "undefined"
@@ -79,7 +114,7 @@ const ChatList = ({ onlineUsers, getRecipient }) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/users");
+        const response = await apiInstance.get("http://localhost:4000/users");
 
         if (response.status === 200) {
           setUsers(
@@ -96,6 +131,10 @@ const ChatList = ({ onlineUsers, getRecipient }) => {
     fetchUsers();
   }, []);
 
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
   return (
     <ChatListContainer>
       <ChatListControls>
@@ -108,26 +147,50 @@ const ChatList = ({ onlineUsers, getRecipient }) => {
         &nbsp;
         <Search placeholder="Search" onChange={(e) => null} />
       </ChatListControls>
-      <ChatListItemContainer>
-        {users.map((item, index) => (
-          <ChatListItem
-            key={index}
-            onClick={() => {
-              localStorage.setItem(
-                "currentChatId",
-                `${item.id}_${user_details?.id}`
-              );
-              localStorage.setItem("selectedRecipientId", `${item.id}`);
-              getRecipient(item.id);
-            }}
-          >
-            <UserListItem
-              user={{ id: item.id.toString(), name: item.name }}
-              isOnline={onlineUsers?.some((user) => user?.userId === item.id)}
-            />
-          </ChatListItem>
-        ))}
-      </ChatListItemContainer>
+      <TabContainer>
+        <Tab
+          active={activeTab === "Chat"}
+          onClick={() => handleTabClick("Chat")}
+        >
+          Chat
+        </Tab>
+        <Tab
+          active={activeTab === "Group Chat"}
+          onClick={() => handleTabClick("Group Chat")}
+        >
+          Group Chat
+        </Tab>
+        <Tab
+          active={activeTab === "Blind Chat"}
+          onClick={() => handleTabClick("Blind Chat")}
+        >
+          Blind Chat
+        </Tab>
+        <EmptyContentTab></EmptyContentTab>
+        {/* Add more tabs as needed */}
+      </TabContainer>
+      {activeTab === "Chat" && (
+        <ChatListItemContainer>
+          {users.map((item, index) => (
+            <ChatListItem
+              key={index}
+              onClick={() => {
+                localStorage.setItem(
+                  "currentChatId",
+                  `${item.id}_${user_details?.id}`
+                );
+                localStorage.setItem("selectedRecipient", JSON.stringify(item));
+                getRecipient(item, !showChatContent);
+              }}
+            >
+              <UserListItem
+                user={{ id: item.id.toString(), name: item.name }}
+                isOnline={onlineUsers?.some((user) => user?.userId === item.id)}
+              />
+            </ChatListItem>
+          ))}
+        </ChatListItemContainer>
+      )}
     </ChatListContainer>
   );
 };

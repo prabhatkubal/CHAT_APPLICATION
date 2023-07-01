@@ -11,6 +11,7 @@ import {
 import Input from "../../../components/Common/Input";
 import Button from "../../../components/Common/Button";
 import InfoMessage from "../../Common/InfoMessage";
+import apiInstance from "../../../api/apiInstance";
 
 export default function Login() {
   const [state, setState] = useState({
@@ -33,17 +34,14 @@ export default function Login() {
 
   const handleSubmit = () => {
     console.log("Submitted value:", state);
-    axios
-      .post("http://localhost:4000/account/login", state, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+    apiInstance
+      .post("http://localhost:4000/account/login", state)
       .then((response) => {
         const data = response.data;
         // Handle the response data
         if (data.success) {
           localStorage.setItem("user_details", JSON.stringify(data.user));
+          localStorage.setItem("token", data.accessToken);
           // Signup successful, redirect to login with success message
           localStorage.setItem("isAuthorised", "true");
           router.push({
