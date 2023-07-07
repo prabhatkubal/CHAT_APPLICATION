@@ -7,7 +7,7 @@ const userSchema = gql`
     name: String!
     email: String!
     password: String!
-    refreshToken: String
+    accessToken: String
     createdAt: String!
     updatedAt: String!
   }
