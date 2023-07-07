@@ -1,33 +1,47 @@
 const express = require("express");
+const { ApolloServer } = require("apollo-server-express");
 const http = require("http");
 const cors = require("cors");
-const { pool } = require("./src/config/db.Config");
 const { sequelize } = require("./models");
-// const session = require("express-session");
-// const passport = require("passport");
 const { Server } = require("socket.io");
 const routes = require("./src/routes/routes");
 const authRoutes = require("./src/routes/routes.auth");
 const corsOptions = require("./src/config/corsOptions");
 const cookieParser = require("cookie-parser");
 const verifyToken = require("./src/middleware/verifyToken");
+const typeDefs = require("./src/graphql/schema");
+const resolvers = require("./src/graphql/resolver");
 
 const BACKEND_PORT = process.env.PORT || 4000;
-// const WEB_SOCKET_PORT = 5000;
+const WEB_SOCKET_PORT = 5000;
 
 const app = express();
 app.use(cors(corsOptions));
-
-const server = http.createServer(app);
-
-// for form data
 app.use(express.urlencoded({ extended: true }));
-
-// for json data
 app.use(express.json());
-
-// for cookies
 app.use(cookieParser());
+
+//apollo server connection
+async function startApolloServer() {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
+
+  await server.start();
+  server.applyMiddleware({ app });
+}
+
+startApolloServer()
+  .then(() => {
+    console.log("Apollo Server started");
+  })
+  .catch((error) => {
+    console.error("Error starting Apollo Server:", error);
+  });
+
+//http server for socket.io
+const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
@@ -79,30 +93,7 @@ function socketioOperations(socket) {
   });
 }
 
-// console.log("onlineUsers", onlineUsers);
-
-// app.get("/", (req, res) => {
-//   res.sendFile(__dirname + "/index.html");
-// });
-
-// const initializePassport = require("./config/passportConfig");
-
-// initializePassport(passport);
-
 app.use(express.json());
-
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET || "secret",
-//     resave: false,
-//     saveUninitialized: false,
-//   })
-// );
-
-// // Funtion inside passport which initializes passport
-// app.use(passport.initialize());
-// // Store our variables to be persisted across the whole session. Works with app.use(Session) above
-// app.use(passport.session());
 
 // Connection test with the database
 async function connectDatabase() {
@@ -121,7 +112,7 @@ connectDatabase();
 
 app.use("/", authRoutes);
 
-app.use(verifyToken);
+// app.use(verifyToken);
 app.use("/", routes);
 
 // Catch-all error handler
@@ -139,5 +130,9 @@ app.use((err, req, res, next) => {
 });
 
 server.listen(BACKEND_PORT, () => {
-  console.log(`Server listening on port ${BACKEND_PORT}`);
+  console.log(`WEB SOCKET & SERVER listening on port ${BACKEND_PORT}`);
 });
+
+// app.listen(BACKEND_PORT, () => {
+//   console.log(`Server listening on port ${BACKEND_PORT}`);
+// });

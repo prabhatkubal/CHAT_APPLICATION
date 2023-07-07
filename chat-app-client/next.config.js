@@ -12,5 +12,6 @@ module.exports = nextConfig;
 module.exports = {
   env: {
     BASE_URL: "http://localhost:4000",
+    WEB_SOCKET: "http://localhost:5000",
   },
 };

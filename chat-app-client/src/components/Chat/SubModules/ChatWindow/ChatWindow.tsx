@@ -91,12 +91,16 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   //   year: "numeric",
   // });
 
+  // console.log(groupedMessages);
+
   Object.keys(groupedMessages).map((date) => {
     groupedMessages[date].map((item, index) => {
-      console.log(
-        item.recipientId !== user_details?.id,
-        item.senderId === user_details?.id
-      );
+      console.log({
+        typeof: typeof item?.recipientId,
+        recipientId: item?.recipientId,
+        senderId: item?.senderId,
+        userId: user_details?.id,
+      });
     });
   });
 

@@ -79,6 +79,7 @@ export const ChatBubbleSent = styled.div`
   border-radius: 12px;
   margin-left: auto;
   font-size: 12px;
+  color: white;
 `;
 
 export const DateDivider = styled.div`

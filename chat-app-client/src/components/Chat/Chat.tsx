@@ -35,7 +35,6 @@ export default function Chat() {
 
       if (data.success) {
         const messages = data.messages;
-        // console.log("Retrieved messages:", messages);
         setMessages([...messages]);
         // Process the retrieved messages here
       } else {
@@ -68,12 +67,10 @@ export default function Chat() {
   // add online users
   useEffect(() => {
     if (socket !== null || "") {
-      console.log(user_details?.id);
       socket.emit("addNewUser", user_details?.id);
 
       socket.on("getOnlineUsers", (data) => {
         setOnlineUsers(data);
-        console.log(data);
       });
     }
   }, [socket]);
@@ -102,11 +99,10 @@ export default function Chat() {
         setOnlineUsers(data);
       });
 
-      socket.on("getMessage", (res) => {
-        console.log(res);
-        setMessages((prev) => [...prev, res]);
-        // getMessagesBySenderAndRecipientId(user_details?.id, recipientId);
-      });
+      // socket.on("getMessage", (res) => {
+      //   setMessages((prev) => [...prev, res]);
+      //   // getMessagesBySenderAndRecipientId(user_details?.id, recipientId);
+      // });
       // Post message data to the "/messages" API
       apiInstance
         .post("http://localhost:4000/messages", {
@@ -134,7 +130,6 @@ export default function Chat() {
   useEffect(() => {
     if (socket !== null) {
       socket.on("getMessage", (res) => {
-        console.log(res);
         setMessages((prev) => [...prev, res]);
         // getMessagesBySenderAndRecipientId(user_details?.id, recipientId);
       });
