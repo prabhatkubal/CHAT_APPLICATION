@@ -1,6 +1,5 @@
 import { useState, ChangeEvent } from "react";
 import { useRouter } from "next/router";
-import axios from "axios";
 import Link from "next/link";
 import {
   Container,
@@ -11,6 +10,8 @@ import {
 import Input from "../../../components/Common/Input";
 import Button from "../../../components/Common/Button";
 import InfoMessage from "../../Common/InfoMessage";
+import { useMutation } from "@apollo/client";
+import { SIGNUP_USER } from "../../../gql/auth/signupUser";
 
 interface SignupState {
   name: string;
@@ -20,6 +21,9 @@ interface SignupState {
 }
 
 export default function Signup() {
+  const [signupUser, { loading: signupLoading, error: signupError }] =
+    useMutation(SIGNUP_USER);
+
   const [message, setMessage] = useState<string | null>(null);
 
   const [state, setState] = useState<SignupState>({
@@ -41,14 +45,13 @@ export default function Signup() {
 
   const handleSubmit = () => {
     console.log("Submitted value:", state);
-    axios
-      .post("http://localhost:4000/account/signup", state, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+    signupUser({
+      variables: {
+        ...state,
+      },
+    })
       .then((response) => {
-        const data = response.data;
+        const data = response.data.signup;
         // Handle the response data
         if (data.success) {
           // Signup successful, redirect to login with success message
@@ -58,9 +61,9 @@ export default function Signup() {
               message: "You have successfully registered. Please login.",
             },
           });
-        } else if (!data.success && data.errors) {
+        } else {
           // Handle the error response
-          setMessage(data.errors.message);
+          setMessage(data.message);
         }
       })
       .catch((error) => {
@@ -102,9 +105,7 @@ export default function Signup() {
           value={state.confirmPassword}
           onChange={(e) => handleInputChange(e)}
         />
-        <Button onClick={handleSubmit}>
-          <Link href="/account/signup">Signup</Link>
-        </Button>
+        <Button onClick={handleSubmit}>Signup</Button>
         <Description>
           <Link href="/account/login">&larr; Already a Member Login</Link>
         </Description>

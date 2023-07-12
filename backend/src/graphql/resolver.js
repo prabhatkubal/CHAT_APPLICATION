@@ -1,7 +1,7 @@
-const userResolver = require("./resolvers/userResolver");
+const userQueries = require("../../graphql/queries/userQueries");
 
 const resolvers = {
-  ...userResolver,
+  ...userQueries,
 };
 
 module.exports = resolvers;

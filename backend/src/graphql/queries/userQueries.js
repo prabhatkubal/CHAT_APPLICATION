@@ -1,6 +1,6 @@
 const User = require("../../../models").User;
 
-const userResolver = {
+const userQueries = {
   Query: {
     getUsers: async () => {
       try {

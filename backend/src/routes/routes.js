@@ -1,12 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
-const { pool } = require("../config/db.Config");
 const User = require("../../models").User;
 const Message = require('../../models').Message;
 const { Op } = require("sequelize");
-const { generateAccessToken } = require("../services/generateTokenService");
-const verifyToken = require("../middleware/verifyToken");
 
 //store messages api
 router.post('/messages', async (req, res) => {

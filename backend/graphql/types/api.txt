@@ -1,0 +1,77 @@
+// login
+mutation {
+  login(
+    email: "johndoe@example.com"
+    password: "password"
+  ) {
+    message
+    success
+    user {
+      id
+      name
+      email
+    }
+    accessToken
+  }
+}
+
+// signup
+mutation {
+  signup(
+    name: "John Doe"
+    email: "johndoe@example.com"
+    password: "password"
+    confirmPassword: "password"
+  ) {
+    message
+    success
+    user {
+      id
+      name
+      email
+    }
+  }
+}
+
+// store messages
+mutation StoreMessages($senderId: Int!, $recipientId: Int!, $chatId: String!, $message: String!, $dateTime: String!) {
+  storeMessages(senderId: $senderId, recipientId: $recipientId, chatId: $chatId, message: $message, dateTime: $dateTime) {
+    success
+    message
+    insertedMessage {
+      messageId
+      senderId
+      recipientId
+      chatId
+      message
+      dateTime
+    }
+  }
+}
+
+// getMessages
+query GetMessages($senderId: Int!, $recipientId: Int!) {
+  getMessages(senderId: $senderId, recipientId: $recipientId) {
+    messageId
+    senderId
+    recipientId
+    chatId
+    message
+    dateTime
+  }
+}
+
+//getAllUsers
+query {
+  getAllUsers {
+    id
+    uuid
+    name
+    email
+    password
+    accessToken
+    createdAt
+    updatedAt
+  }
+}
+

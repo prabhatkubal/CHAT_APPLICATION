@@ -9,11 +9,10 @@ const authRoutes = require("./src/routes/routes.auth");
 const corsOptions = require("./src/config/corsOptions");
 const cookieParser = require("cookie-parser");
 const verifyToken = require("./src/middleware/verifyToken");
-const typeDefs = require("./src/graphql/schema");
-const resolvers = require("./src/graphql/resolver");
+const typeDefs = require("./graphql/schema");
+const resolvers = require("./graphql/resolvers");
 
 const BACKEND_PORT = process.env.PORT || 4000;
-const WEB_SOCKET_PORT = 5000;
 
 const app = express();
 app.use(cors(corsOptions));

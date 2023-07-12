@@ -5,6 +5,8 @@ import { ThemeProvider } from "styled-components";
 import GlobalStyle from "../styles/globalstyles";
 import { CustomTheme, lightTheme, darkTheme } from "../styles/theme";
 import { useToggleTheme } from "../theme/themeUtilis";
+import { ApolloProvider } from "@apollo/client";
+import client from "../api/apiInstance";
 
 // const theme: DefaultTheme = {
 //   colors: {
@@ -23,13 +25,15 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        {/* <ToggleThemeButton onClick={toggleTheme}>
+      <ApolloProvider client={client}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          {/* <ToggleThemeButton onClick={toggleTheme}>
           Toggle Theme
         </ToggleThemeButton> */}
-        <Component {...pageProps} />
-      </ThemeProvider>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </ApolloProvider>
     </>
   );
 }
