@@ -6,6 +6,10 @@ import HamburgerMenuIcon from "./HamburgerIcon";
 import UserListItem from "./UserListItem";
 import { useToggleTheme } from "../../../theme/themeUtilis";
 import apiInstance from "../../../api/apiInstance";
+import axios from "axios";
+import client from "../../../api/apiInstance";
+import { GET_USERS } from "../../../gql/queries/getAllUsers";
+
 
 interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
   active: boolean;
@@ -112,17 +116,30 @@ const ChatList = ({ onlineUsers, getRecipient, showChatContent }) => {
   }, []);
 
   useEffect(() => {
+    // const fetchUsers = async () => {
+    //   try {
+    //     const response = await axios.get("http://localhost:4000/users");
+
+    //     if (response.status === 200) {
+    //       setUsers(
+    //         response.data.users.filter((user) => user.id !== user_details?.id)
+    //       );
+    //     } else {
+    //       console.error("Failed to fetch users:", response.data.error);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching users:", error);
+    //   }
+    // };
+
     const fetchUsers = async () => {
       try {
-        const response = await apiInstance.get("http://localhost:4000/users");
+        const { data } = await client.query({ query: GET_USERS });
 
-        if (response.status === 200) {
-          setUsers(
-            response.data.users.filter((user) => user.id !== user_details?.id)
-          );
-        } else {
-          console.error("Failed to fetch users:", response.data.error);
-        }
+        const users = data.getUsers.filter(
+          (user) => user.id !== user_details?.id
+        );
+        setUsers(users);
       } catch (error) {
         console.error("Error fetching users:", error);
       }

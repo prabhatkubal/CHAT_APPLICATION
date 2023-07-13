@@ -4,6 +4,10 @@ import ChatList from "./SubModules/ChatList";
 import ChatWindow from "./SubModules/ChatWindow/ChatWindow";
 import io from "socket.io-client";
 import apiInstance from "../../api/apiInstance";
+import { GET_MESSAGES } from "../../gql/queries/getUserMessages";
+import { STORE_MESSAGES } from "../../gql/mutations/storeUserMessages";
+import client from "../../api/apiInstance";
+import { useMutation } from "@apollo/client";
 
 export default function Chat() {
   const user_details =
@@ -25,21 +29,28 @@ export default function Chat() {
   const [recipient, setRecipient] = useState(
     selectedRecipient ? selectedRecipient : null
   );
+  const [storeMessages, { loading: storeLoading, error: storeError }] =
+    useMutation(STORE_MESSAGES);
 
   async function getMessagesBySenderAndRecipientId(senderId, recipientId) {
     try {
-      const response = await apiInstance.get(
-        `http://localhost:4000/messages/${senderId}/${recipientId}`
-      );
-      const data = response.data;
+      const { data, error } = await client.query({
+        query: GET_MESSAGES,
+        variables: {
+          senderId,
+          recipientId,
+        },
+      });
 
-      if (data.success) {
-        const messages = data.messages;
-        setMessages([...messages]);
-        // Process the retrieved messages here
-      } else {
-        console.error("Failed to retrieve messages:", data.error);
+      if (error) {
+        console.error("Error retrieving messages:", error);
+        return;
       }
+
+      const messages = data.getMessages;
+      setMessages([...messages]);
+
+      // Process the retrieved messages here
     } catch (error) {
       console.error("Error retrieving messages:", error);
     }
@@ -48,7 +59,10 @@ export default function Chat() {
   //get messages based on chat selected
   useEffect(() => {
     if (recipientId !== null) {
-      getMessagesBySenderAndRecipientId(user_details?.id, recipientId);
+      getMessagesBySenderAndRecipientId(
+        parseInt(`${user_details?.id}`, 10),
+        parseInt(`${recipientId}`, 10)
+      );
     }
   }, [recipientId]);
 
@@ -104,23 +118,28 @@ export default function Chat() {
       //   // getMessagesBySenderAndRecipientId(user_details?.id, recipientId);
       // });
       // Post message data to the "/messages" API
-      apiInstance
-        .post("http://localhost:4000/messages", {
+      storeMessages({
+        variables: {
           senderId: user_details?.id,
           recipientId,
           chatId: `${recipientId}_${user_details?.id}`,
           message: newMessage.message,
           dateTime: new Date().toISOString(),
-        })
+        },
+      })
         .then((response) => {
-          if (response.data.success) {
-            // console.log("Message inserted successfully:", response.data);
-            // getMessagesBySenderAndrecipientId(user_details?.id, recipientId);
+          const data = response.data.storeMessages;
+          if (data.success) {
+            // Message inserted successfully
+            const insertedMessage = data.insertedMessage;
+            // Process the inserted message here
           } else {
-            console.error("Failed to insert message:", response.data.error);
+            // Handle the error response
+            console.error("Failed to insert message:", data.message);
           }
         })
         .catch((error) => {
+          // Handle any errors
           console.error("Failed to insert message:", error);
         });
     }

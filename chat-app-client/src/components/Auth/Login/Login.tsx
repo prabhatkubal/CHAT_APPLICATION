@@ -12,8 +12,13 @@ import Input from "../../../components/Common/Input";
 import Button from "../../../components/Common/Button";
 import InfoMessage from "../../Common/InfoMessage";
 import apiInstance from "../../../api/apiInstance";
+import { LOGIN_USER } from "../../../gql/mutations/auth/loginUser";
+import { useMutation } from "@apollo/client";
 
 export default function Login() {
+  const [loginUser, { loading: loginLoading, error: loginError }] =
+    useMutation(LOGIN_USER);
+
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -34,10 +39,14 @@ export default function Login() {
 
   const handleSubmit = () => {
     console.log("Submitted value:", state);
-    apiInstance
-      .post("http://localhost:4000/account/login", state)
+    loginUser({
+      variables: {
+        email: state.email,
+        password: state.password,
+      },
+    })
       .then((response) => {
-        const data = response.data;
+        const data = response.data.login;
         // Handle the response data
         if (data.success) {
           localStorage.setItem("user_details", JSON.stringify(data.user));

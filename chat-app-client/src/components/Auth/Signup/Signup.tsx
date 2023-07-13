@@ -11,7 +11,7 @@ import Input from "../../../components/Common/Input";
 import Button from "../../../components/Common/Button";
 import InfoMessage from "../../Common/InfoMessage";
 import { useMutation } from "@apollo/client";
-import { SIGNUP_USER } from "../../../gql/auth/signupUser";
+import { SIGNUP_USER } from "../../../gql/mutations/auth/signupUser";
 
 interface SignupState {
   name: string;
