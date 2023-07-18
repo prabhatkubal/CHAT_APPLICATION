@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ChatLayout from "../../Layout/ChatRoomLayout";
-import ChatList from "./SubModules/ChatList";
+import ChatList from "./SubModules/ChatList/ChatList";
 import ChatWindow from "./SubModules/ChatWindow/ChatWindow";
 import io from "socket.io-client";
-import apiInstance from "../../api/apiInstance";
 import { GET_MESSAGES } from "../../gql/queries/getUserMessages";
 import { STORE_MESSAGES } from "../../gql/mutations/storeUserMessages";
 import client from "../../api/apiInstance";
@@ -26,6 +25,7 @@ export default function Chat() {
   const [recipientId, setRecipientId] = useState(
     selectedRecipient?.id ? selectedRecipient?.id : null
   );
+  const [loading, setLoading] = useState(false);
   const [recipient, setRecipient] = useState(
     selectedRecipient ? selectedRecipient : null
   );
@@ -34,12 +34,15 @@ export default function Chat() {
 
   async function getMessagesBySenderAndRecipientId(senderId, recipientId) {
     try {
+      setLoading(true);
+
       const { data, error } = await client.query({
         query: GET_MESSAGES,
         variables: {
           senderId,
           recipientId,
         },
+        fetchPolicy: "network-only",
       });
 
       if (error) {
@@ -48,11 +51,13 @@ export default function Chat() {
       }
 
       const messages = data.getMessages;
-      setMessages([...messages]);
 
+      setMessages([...messages]);
+      setLoading(false);
       // Process the retrieved messages here
     } catch (error) {
       console.error("Error retrieving messages:", error);
+      setLoading(false);
     }
   }
 
@@ -109,6 +114,13 @@ export default function Chat() {
         chatId: `${recipientId}_${user_details?.id}`,
       });
 
+      console.log("sentMessage", {
+        ...newMessage,
+        recipientId: recipientId,
+        senderId: user_details?.id,
+        chatId: `${recipientId}_${user_details?.id}`,
+      });
+
       socket.on("getOnlineUsers", (data) => {
         setOnlineUsers(data);
       });
@@ -120,11 +132,11 @@ export default function Chat() {
       // Post message data to the "/messages" API
       storeMessages({
         variables: {
-          senderId: user_details?.id,
-          recipientId,
+          senderId: parseInt(`${user_details?.id}`, 10),
+          recipientId: parseInt(`${recipientId}`, 10),
           chatId: `${recipientId}_${user_details?.id}`,
           message: newMessage.message,
-          dateTime: new Date().toISOString(),
+          dateTime: newMessage.dateTime,
         },
       })
         .then((response) => {
@@ -132,7 +144,7 @@ export default function Chat() {
           if (data.success) {
             // Message inserted successfully
             const insertedMessage = data.insertedMessage;
-            // Process the inserted message here
+            client.clearStore();
           } else {
             // Handle the error response
             console.error("Failed to insert message:", data.message);
@@ -150,6 +162,7 @@ export default function Chat() {
     if (socket !== null) {
       socket.on("getMessage", (res) => {
         setMessages((prev) => [...prev, res]);
+        console.log("gotMessage", res); 
         // getMessagesBySenderAndRecipientId(user_details?.id, recipientId);
       });
 
@@ -195,6 +208,7 @@ export default function Chat() {
       }
       chatContent={
         <ChatWindow
+          loading={loading}
           onlineUsers={onlineUsers}
           messages={messages}
           emitMessage={emitMessage}

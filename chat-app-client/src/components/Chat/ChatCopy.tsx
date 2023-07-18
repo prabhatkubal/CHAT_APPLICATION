@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ChatLayout from "../../Layout/ChatRoomLayout";
-import ChatList from "./SubModules/ChatList";
+import ChatList from "./SubModules/ChatList/ChatList";
 import ChatWindow from "./SubModules/ChatWindow/ChatWindow";
 import io from "socket.io-client";
 import apiInstance from "../../api/apiInstance";

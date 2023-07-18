@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import Search from "../../../Common/Search";
 import Button from "../../../Common/Button";
-import UserListItem from "../UserListItem";
+import UserListItem from "../UserListItem/UserListItem";
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { groupMessagesByDate } from "../../../../utils/dateUtils";
 import {
@@ -37,6 +37,7 @@ const DateDividerWithLine = ({ date }) => {
 const ChatWindow: React.FC<ChatWindowProps> = ({
   emitMessage,
   messages,
+  loading,
   chatExit,
   onlineUsers,
   recipient,
@@ -91,18 +92,20 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   //   year: "numeric",
   // });
 
-  // console.log(groupedMessages);
+  // Object.keys(groupedMessages).map((date) => {
+  //   groupedMessages[date].map((item, index) => {
+  //     console.log({
+  //       date: date,
+  //       typeof: typeof item?.recipientId,
+  //       recipientId: item?.recipientId,
+  //       senderId: item?.senderId,
+  //       userId: user_details?.id,
+  //       message: item?.message,
+  //     });
+  //   });
+  // });
 
-  Object.keys(groupedMessages).map((date) => {
-    groupedMessages[date].map((item, index) => {
-      console.log({
-        typeof: typeof item?.recipientId,
-        recipientId: item?.recipientId,
-        senderId: item?.senderId,
-        userId: user_details?.id,
-      });
-    });
-  });
+  console.log(messages);
 
   return (
     <ChatWindowContainer>
@@ -120,30 +123,34 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
           />
         )}
       </ChatHeaderContainer>
-      <ChatContentContainer ref={chatContentRef}>
-        {Object.keys(groupedMessages).map((date) => (
-          <React.Fragment key={date}>
-            {date !== "Invalid Date" ? (
-              <DateDividerWithLine date={date} />
-            ) : null}
-            {groupedMessages[date].map((item, index) => (
-              <React.Fragment key={index}>
-                {item.recipientId === user_details?.id && (
-                  <ChatBubbleReceived>{item.message}</ChatBubbleReceived>
-                )}
-                {item.senderId === user_details?.id && (
-                  <ChatBubbleSent>{item.message}</ChatBubbleSent>
-                )}
-              </React.Fragment>
-            ))}
-          </React.Fragment>
-        ))}
-      </ChatContentContainer>
+      {loading === false ? (
+        <ChatContentContainer ref={chatContentRef}>
+          {Object.keys(groupedMessages).map((date) => (
+            <React.Fragment key={date}>
+              {date !== "Invalid Date" ? (
+                <DateDividerWithLine date={date} />
+              ) : null}
+              {groupedMessages[date].map((item, index) => (
+                <React.Fragment key={index}>
+                  {item.recipientId == user_details?.id && (
+                    <ChatBubbleReceived>{item.message}</ChatBubbleReceived>
+                  )}
+                  {item.senderId == user_details?.id && (
+                    <ChatBubbleSent>{item.message}</ChatBubbleSent>
+                  )}
+                </React.Fragment>
+              ))}
+            </React.Fragment>
+          ))}
+        </ChatContentContainer>
+      ) : null}
       <ChatInputContainer>
         <Search
           value={state.message}
           placeholder="Search"
-          onChange={(e) => setState({ message: e.target.value })}
+          onChange={(e) => {
+            setState({ message: e.target.value });
+          }}
           onKeyDown={state.message !== "" ? handleSearchKeyDown : null}
         />
         {/* <Button onClick={handleMessageSend}>➡️ Send</Button> */}

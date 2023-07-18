@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import Search from "../../Common/Search";
-import HamburgerMenuIcon from "./HamburgerIcon";
-import UserListItem from "./UserListItem";
-import { useToggleTheme } from "../../../theme/themeUtilis";
-import apiInstance from "../../../api/apiInstance";
+import Search from "../../../Common/Search";
+import HamburgerMenuIcon from "../HamburgerIcon/HamburgerIcon";
+import UserListItem from "../UserListItem/UserListItem";
+import { useToggleTheme } from "../../../../theme/themeUtilis";
+import apiInstance from "../../../../api/apiInstance";
 import axios from "axios";
-import client from "../../../api/apiInstance";
-import { GET_USERS } from "../../../gql/queries/getAllUsers";
+import client from "../../../../api/apiInstance";
+import { GET_USERS } from "../../../../gql/queries/getAllUsers";
 
 
 interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -116,22 +116,6 @@ const ChatList = ({ onlineUsers, getRecipient, showChatContent }) => {
   }, []);
 
   useEffect(() => {
-    // const fetchUsers = async () => {
-    //   try {
-    //     const response = await axios.get("http://localhost:4000/users");
-
-    //     if (response.status === 200) {
-    //       setUsers(
-    //         response.data.users.filter((user) => user.id !== user_details?.id)
-    //       );
-    //     } else {
-    //       console.error("Failed to fetch users:", response.data.error);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching users:", error);
-    //   }
-    // };
-
     const fetchUsers = async () => {
       try {
         const { data } = await client.query({ query: GET_USERS });

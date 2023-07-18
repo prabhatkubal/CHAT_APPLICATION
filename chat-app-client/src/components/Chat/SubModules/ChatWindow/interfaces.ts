@@ -9,7 +9,7 @@ export interface MessageData {
     recipientId: string;
     chatId: string;
     message: string;
-    datetime: string;
+    dateTime: string;
   }
   
   export interface Recipient {
@@ -23,6 +23,7 @@ export interface MessageData {
     messages: Messages[];
     onlineUsers: Array<any>;
     recipient: Recipient;
+    loading: boolean;
   }
   
   export interface ChatWindowState {

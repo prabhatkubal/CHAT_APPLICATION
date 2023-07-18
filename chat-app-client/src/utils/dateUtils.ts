@@ -9,7 +9,7 @@ interface Messages {
   recipientId: string;
   chatId: string;
   message: string;
-  datetime: string;
+  dateTime: string;
 }
 
 export const groupMessagesByDate = (
@@ -18,7 +18,7 @@ export const groupMessagesByDate = (
   const groupedMessages: { [date: string]: Messages[] } = {};
 
   messages.forEach((message) => {
-    const date = new Date(message.datetime).toLocaleDateString("en-US", {
+    const date = new Date(parseInt(message.dateTime)).toLocaleDateString("en-US", {
       month: "long",
       day: "numeric",
       year: "numeric",
