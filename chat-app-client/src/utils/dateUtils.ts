@@ -1,8 +1,3 @@
-interface MessageData {
-  message: string;
-  dateTime: Date;
-}
-
 interface Messages {
   messageId: string;
   senderId: string;
@@ -18,18 +13,42 @@ export const groupMessagesByDate = (
   const groupedMessages: { [date: string]: Messages[] } = {};
 
   messages.forEach((message) => {
-    const date = new Date(parseInt(message.dateTime)).toLocaleDateString("en-US", {
+    // Parse the timestamp string into a Date object
+    const timestamp = parseInt(message.dateTime);
+    const date = new Date(timestamp);
+
+    // Format the date portion
+    const formattedDate = date.toLocaleDateString("en-US", {
       month: "long",
       day: "numeric",
       year: "numeric",
     });
 
-    if (groupedMessages[date]) {
-      groupedMessages[date].push(message);
+    // // Format the time portion
+    // const formattedTime = date.toLocaleTimeString("en-US", {
+    //   hour: "numeric",
+    //   minute: "numeric",
+    // });
+
+    // Combine date and time for grouping
+    const fullDate = `${formattedDate}`;
+
+    if (groupedMessages[fullDate]) {
+      groupedMessages[fullDate].push(message);
     } else {
-      groupedMessages[date] = [message];
+      groupedMessages[fullDate] = [message];
     }
   });
 
   return groupedMessages;
 };
+
+function parseDateToTimestamp(dateString) {
+  const timestamp = Date.parse(dateString);
+  if (!isNaN(timestamp)) {
+    return timestamp;
+  }
+  return null;
+}
+
+export default parseDateToTimestamp;

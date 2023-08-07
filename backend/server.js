@@ -71,7 +71,7 @@ function socketioOperations(socket) {
   console.log("onlineUsers", onlineUsers);
 
   socket.on("sendMessage", (message) => {
-    console.log(message.recipientId);
+    console.log(message.recipientId, message);
     const user = onlineUsers.find((user) => user.id == message.recipientId);
     console.log("prabhat", user);
 

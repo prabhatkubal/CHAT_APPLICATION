@@ -8,6 +8,8 @@ const messageTypes = gql`
     chatId: String!
     message: String!
     dateTime: String!
+    createdAt: String!
+    updatedAt: String!
   }
 
   extend type Query {

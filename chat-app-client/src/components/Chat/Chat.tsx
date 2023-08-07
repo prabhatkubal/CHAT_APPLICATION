@@ -7,6 +7,7 @@ import { GET_MESSAGES } from "../../gql/queries/getUserMessages";
 import { STORE_MESSAGES } from "../../gql/mutations/storeUserMessages";
 import client from "../../api/apiInstance";
 import { useMutation } from "@apollo/client";
+import parseDateToTimestamp from "../../utils/dateUtils";
 
 export default function Chat() {
   const user_details =
@@ -101,6 +102,7 @@ export default function Chat() {
         ...prev,
         {
           ...newMessage,
+          dateTime: parseDateToTimestamp(newMessage.dateTime),
           recipientId: recipientId,
           senderId: user_details?.id,
           chatId: `${recipientId}_${user_details?.id}`,
@@ -161,8 +163,13 @@ export default function Chat() {
   useEffect(() => {
     if (socket !== null) {
       socket.on("getMessage", (res) => {
-        setMessages((prev) => [...prev, res]);
-        console.log("gotMessage", res); 
+        setMessages((prev) => [
+          ...prev,
+          {
+            ...res,
+            dateTime: parseDateToTimestamp(res.dateTime),
+          },
+        ]);
         // getMessagesBySenderAndRecipientId(user_details?.id, recipientId);
       });
 
@@ -183,6 +190,7 @@ export default function Chat() {
   }
 
   const emitMessage = (message) => {
+    console.log(message);
     setNewMessage(message);
   };
 
