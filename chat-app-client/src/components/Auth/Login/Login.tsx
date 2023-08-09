@@ -14,6 +14,7 @@ import InfoMessage from "../../Common/InfoMessage";
 import apiInstance from "../../../api/apiInstance";
 import { LOGIN_USER } from "../../../gql/mutations/auth/loginUser";
 import { useMutation } from "@apollo/client";
+import client from "../../../api/apiInstance";
 
 export default function Login() {
   const [loginUser, { loading: loginLoading, error: loginError }] =
@@ -39,7 +40,8 @@ export default function Login() {
 
   const handleSubmit = () => {
     console.log("Submitted value:", state);
-    loginUser({
+    client.mutate({
+      mutation: LOGIN_USER,
       variables: {
         email: state.email,
         password: state.password,
