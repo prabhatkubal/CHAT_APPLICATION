@@ -25,10 +25,11 @@ async function startApolloServer() {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    context: ({ req, res }) => ({ req, res }),
   });
 
   await server.start();
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: false });
 }
 
 startApolloServer()
@@ -109,10 +110,10 @@ async function connectDatabase() {
 
 connectDatabase();
 
-app.use("/", authRoutes);
+// app.use("/", authRoutes);
 
-// app.use(verifyToken);
-app.use("/", routes);
+// // app.use(verifyToken);
+// app.use("/", routes);
 
 // Catch-all error handler
 app.use((err, req, res, next) => {

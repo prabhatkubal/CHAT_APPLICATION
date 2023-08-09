@@ -4,6 +4,8 @@ import Button from "../../../Common/Button";
 import { useRouter } from "next/router";
 import Switch from "../../../Common/SwitchToggle";
 import { useToggleTheme } from "../../../../theme/themeUtilis";
+import { LOGOUT_USER } from "../../../../gql/mutations/auth/logoutUser";
+import { useMutation } from "@apollo/client";
 
 const Hamburger = styled.div``;
 
@@ -98,10 +100,29 @@ const HamburgerMenuIcon = ({
   const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
   const { isDarkMode, toggleTheme } = useToggleTheme();
+  const [logoutuser, { loading: loginLoading, error: loginError }] =
+    useMutation(LOGOUT_USER);
 
   const handleSwitchToggle = () => {
     setIsChecked(!isChecked);
     toggleTheme();
+  };
+
+  const handleLogout = async () => {
+    try {
+      const { data } = await logoutuser();
+      console.log(data.message); // Display success message
+
+      localStorage.clear();
+      sessionStorage.clear();
+      router.push({
+        pathname: "/account/login",
+      });
+      // Redirect to login page
+      // window.location.href = "/account/login";
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   return (
@@ -123,16 +144,7 @@ const HamburgerMenuIcon = ({
           Night Time
         </HamburgerMenuItem>
         <HamburgerMenuItem>
-          <Button
-            onClick={() => {
-              router.push({
-                pathname: "/account/login",
-              });
-              localStorage.clear();
-            }}
-          >
-            Logout
-          </Button>
+          <Button onClick={handleLogout}>Logout</Button>
         </HamburgerMenuItem>
       </HamburgerMenu>
       {isOpen ? (

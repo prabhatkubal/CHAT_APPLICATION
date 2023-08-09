@@ -17,10 +17,9 @@ const userTypes = gql`
   }
 
   extend type Mutation {
-    login(
-      email: String!
-      password: String!
-    ): LoginResponse!
+    login(email: String!, password: String!): LoginResponse!
+
+    logout: LogoutResponse!
 
     signup(
       uuid: String
@@ -42,6 +41,11 @@ const userTypes = gql`
     message: String!
     success: Boolean!
     user: User
+  }
+
+  type LogoutResponse {
+    message: String!
+    success: Boolean!
   }
 `;
 
