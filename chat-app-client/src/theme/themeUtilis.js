@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CustomTheme, lightTheme, darkTheme } from "../styles/theme";
 
 export const useToggleTheme = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -7,5 +8,9 @@ export const useToggleTheme = () => {
     setIsDarkMode((prevMode) => !prevMode);
   };
 
-  return { isDarkMode, toggleTheme };
+  const theme = isDarkMode ? darkTheme : lightTheme;
+
+  console.log("themeUtils");
+
+  return { theme, toggleTheme };
 };

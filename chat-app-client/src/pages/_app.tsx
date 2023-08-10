@@ -7,6 +7,8 @@ import { CustomTheme, lightTheme, darkTheme } from "../styles/theme";
 import { useToggleTheme } from "../theme/themeUtilis";
 import { ApolloProvider } from "@apollo/client";
 import client from "../api/apiInstance";
+import { GetServerSideProps } from "next";
+import { ThemeContextProvider } from "../theme/themeContext";
 
 // const theme: DefaultTheme = {
 //   colors: {
@@ -20,19 +22,23 @@ const ToggleThemeButton = styled.button`
 `;
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { isDarkMode, toggleTheme } = useToggleTheme();
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme, toggleTheme } = useToggleTheme();
+  // const theme = isDarkMode ? darkTheme : lightTheme;
+
+  console.log("_app");
 
   return (
     <>
       <ApolloProvider client={client}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          {/* <ToggleThemeButton onClick={toggleTheme}>
-          Toggle Theme
-        </ToggleThemeButton> */}
-          <Component {...pageProps} />
-        </ThemeProvider>
+        <ThemeContextProvider>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <ToggleThemeButton onClick={toggleTheme}>
+              Toggle Theme
+            </ToggleThemeButton>
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </ThemeContextProvider>
       </ApolloProvider>
     </>
   );

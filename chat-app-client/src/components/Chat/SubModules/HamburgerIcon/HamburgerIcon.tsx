@@ -3,9 +3,10 @@ import styled from "styled-components";
 import Button from "../../../Common/Button";
 import { useRouter } from "next/router";
 import Switch from "../../../Common/SwitchToggle";
-import { useToggleTheme } from "../../../../theme/themeUtilis";
+// import { useToggleTheme } from "../../../../theme/themeUtilis";
 import { LOGOUT_USER } from "../../../../gql/mutations/auth/logoutUser";
 import { useMutation } from "@apollo/client";
+import { useThemeContext } from "../../../../theme/themeContext";
 
 const Hamburger = styled.div``;
 
@@ -55,7 +56,7 @@ const HamburgerMenu = styled.ul`
   top: 0;
   left: -100%;
   padding: 10px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.background};
   list-style: none;
   -webkit-transition: right 0.3s ease;
   transition: right 0.3s ease;
@@ -99,13 +100,14 @@ const HamburgerMenuIcon = ({
 }) => {
   const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
-  const { isDarkMode, toggleTheme } = useToggleTheme();
+  const { toggleTheme } = useThemeContext();
   const [logoutuser, { loading: loginLoading, error: loginError }] =
     useMutation(LOGOUT_USER);
 
   const handleSwitchToggle = () => {
-    setIsChecked(!isChecked);
+    console.log("HamburgerIcon");
     toggleTheme();
+    setIsChecked(!isChecked);
   };
 
   const handleLogout = async () => {

@@ -3,9 +3,9 @@ const jwt = require("jsonwebtoken");
 function verifyToken(req, res, next) {
   // Get the token from the request header, query parameter, or cookie
   const token =
-    req?.headers?.authorization?.split(' ')[1] || req?.query?.token || req?.cookies?.jwt;
-
-    // const jwt = req?.cookies?.jwt;
+    req?.headers?.authorization?.split(" ")[1] ||
+    req?.query?.token ||
+    req?.cookies?.jwt;
 
   if (!token) {
     return res

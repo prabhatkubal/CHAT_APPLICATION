@@ -3,7 +3,8 @@ import styled from "styled-components";
 
 const StyledButton = styled.button`
   font-size: 15px;
-  background: transparent;
+  background-color: ${({ theme }) => theme.colors.buttonlg};
+  color: ${({ theme }) => theme.colors.primary};
   border: 1px solid grey;
   padding: 4px 12px;
   cursor: pointer;

@@ -7,6 +7,7 @@ const StyledInput = styled.input`
   border-radius: 5px;
   border: 1px solid grey;
   padding: 5px 5px;
+  background-color: ${({ theme }) => theme.colors.bgInputColor};
 
   &:focus {
     border-color: #a9c8ff;
@@ -14,7 +15,6 @@ const StyledInput = styled.input`
     background: #a9c8ff;
   }
 `;
-
 
 interface InputProps {
   name: string;

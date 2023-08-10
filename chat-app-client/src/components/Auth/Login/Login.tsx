@@ -52,7 +52,7 @@ export default function Login() {
         // Handle the response data
         if (data.success) {
           localStorage.setItem("user_details", JSON.stringify(data.user));
-          localStorage.setItem("token", data.accessToken);
+          // localStorage.setItem("token", data.accessToken);
           // Signup successful, redirect to login with success message
           localStorage.setItem("isAuthorised", "true");
           router.push({

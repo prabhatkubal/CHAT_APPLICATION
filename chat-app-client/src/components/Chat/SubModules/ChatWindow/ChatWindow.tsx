@@ -105,7 +105,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   //   });
   // });
 
-  console.log(messages);
+  // console.log(messages);
 
   return (
     <ChatWindowContainer>

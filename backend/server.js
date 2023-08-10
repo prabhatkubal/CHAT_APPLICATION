@@ -26,7 +26,7 @@ app.use(cookieParser());
 // };
 
 const customMiddleware = (req, res, next) => {
-  console.log(req.headers.clientpathname);
+  // console.log(req.headers.clientpathname);
   if (
     req.headers.clientpathname !== "/account/login" &&
     req.headers.clientpathname !== "/account/signup"

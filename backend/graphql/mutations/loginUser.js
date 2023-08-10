@@ -44,9 +44,8 @@ const loginUser = {
         // Update refresh token in the database
         await user.update({ refresh_token: refreshToken });
 
-        console.log(res, "my response");
-
         res.cookie("jwt", accessToken, {
+          
           httpOnly: true,
           secure: process.env.NODE_ENV === "production", // Set 'secure' based on your environment
           maxAge: 3600000, // Specify the expiration time in milliseconds
