@@ -7,14 +7,27 @@ declare module "styled-components" {
       secondary: string;
       background: string;
       backgroundOffSet: string;
-      headerBtmBorder: string;
       bgInputColor: string;
       backgroundalt: string;
       backgroundaltrev: string;
-      borderRight: string;
       text: string;
       button: string;
       buttonlg: string;
+    };
+
+    borders: {
+      headerBtmBorder: string;
+      borderRight: string;
+    };
+
+    tabs: {
+      tabActiveBgColor: string;
+      tabInActiveBgColor: string;
+      tabActiveColor: string;
+      tabInActiveColor: string;
+      tabBorder: string;
+      tabActiveBorderBtm: string;
+      tabInActiveBorderBtm: string;
     };
   }
 }

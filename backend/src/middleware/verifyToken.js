@@ -39,7 +39,6 @@ async function verifyToken(req, res, next) {
         process.env.REFRESH_TOKEN_SECRET,
         (err, decoded) => {
           if (err) {
-            console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
             res.clearCookie("jwt", {
               httpOnly: true,
               secure: process.env.NODE_ENV === "production",

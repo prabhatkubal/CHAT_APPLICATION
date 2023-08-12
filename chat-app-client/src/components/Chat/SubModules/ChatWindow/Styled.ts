@@ -15,7 +15,7 @@ export const ChatHeaderContainer = styled.div`
   display: flex;
   align-items: center;
   background-color: ${({ theme }) => theme.colors.backgroundOffSet};
-  border-bottom: ${({ theme }) => theme.colors.headerBtmBorder};
+  border-bottom: ${({ theme }) => theme.borders.headerBtmBorder};
   padding: 10px;
   width: 100%;
   position: absolute;

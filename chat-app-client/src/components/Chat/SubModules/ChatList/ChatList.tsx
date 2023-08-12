@@ -10,7 +10,6 @@ import axios from "axios";
 import client from "../../../../api/apiInstance";
 import { GET_USERS } from "../../../../gql/queries/getAllUsers";
 
-
 interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
   active: boolean;
 }
@@ -27,11 +26,20 @@ const TabContainer = styled.div`
 
 const Tab = styled.div<TabProps>`
   padding: 0.4rem 0.5rem;
-  background-color: ${(props) => (props.active ? "#f9f9f9" : "#f0f0f0")};
-  color: ${(props) => (props.active ? "#000000" : "#888888")};
+  background-color: ${(props) =>
+    props.active
+      ? props.theme.tabs.tabActiveBgColor
+      : props.theme.tabs.tabInActiveBgColor};
+  color: ${(props) =>
+    props.active
+      ? props.theme.tabs.tabActiveColor
+      : props.theme.tabs.tabInActiveColor};
   font-weight: ${(props) => (props.active ? "400" : "400")};
-  border: 1px solid #e0e0e0;
-  border-bottom: ${(props) => (props.active ? "none" : "1px solid #e0e0e0")};
+  border: ${({ theme }) => theme.tabs.tabBorder};
+  border-bottom: ${(props) =>
+    props.active
+      ? props.theme.tabs.tabActiveBorderBtm
+      : props.theme.tabs.tabInActiveBorderBtm};
   border-radius: 4px 4px 0 0;
   cursor: pointer;
   margin: 0;
@@ -46,7 +54,7 @@ const Tab = styled.div<TabProps>`
 
 const EmptyContentTab = styled.div`
   flex-grow: 1;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: ${({ theme }) => theme.tabs.tabBorder};
 `;
 
 const ChatListContainer = styled.div`

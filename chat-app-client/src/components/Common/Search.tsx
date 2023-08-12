@@ -6,13 +6,12 @@ const StyledSearchInput = styled.input`
   margin-bottom: 10px;
   font-size: 15px;
   border-radius: 5px;
-  border: 1px solid #d1d1d1;
+  border: 1px solid grey;
   padding: 5px 5px;
-  background: white;
-  color:grey;
+  background-color: ${({ theme }) => theme.colors.bgInputColor};
+  color: grey;
 
   &:focus {
-    background: white;
     border-color: #a9c8ff;
     outline: none;
     border: 2px solid #a9c8ff;
@@ -26,7 +25,12 @@ interface SearchProps {
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ placeholder, value, onChange, onKeyDown }) => {
+const Search: React.FC<SearchProps> = ({
+  placeholder,
+  value,
+  onChange,
+  onKeyDown,
+}) => {
   return (
     <StyledSearchInput
       type="text"
