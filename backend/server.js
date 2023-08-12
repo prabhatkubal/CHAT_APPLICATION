@@ -81,7 +81,6 @@ function socketioOperations(socket) {
         id: userId,
         socketId: socket.id,
       });
-    console.log("prabhat");
 
     io.emit("getOnlineUsers", onlineUsers);
   });

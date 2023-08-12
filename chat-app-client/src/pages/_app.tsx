@@ -25,8 +25,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const { theme, toggleTheme } = useToggleTheme();
   // const theme = isDarkMode ? darkTheme : lightTheme;
 
-  console.log("_app");
-
   return (
     <>
       <ApolloProvider client={client}>

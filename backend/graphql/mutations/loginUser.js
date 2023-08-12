@@ -37,6 +37,8 @@ const loginUser = {
           throw new Error("Password is incorrect");
         }
 
+        console.log(user, "theuser")
+
         // Generate access token and refresh token
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);

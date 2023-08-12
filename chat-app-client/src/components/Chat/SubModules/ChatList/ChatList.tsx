@@ -145,7 +145,7 @@ const ChatList = ({ onlineUsers, getRecipient, showChatContent }) => {
           onToggleTheme={toggleTheme}
           onOutsideClick={() => setIsOpen(false)}
         />
-        &nbsp;
+        &nbsp;&nbsp;
         <Search placeholder="Search" onChange={(e) => null} />
       </ChatListControls>
       <TabContainer>

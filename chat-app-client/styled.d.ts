@@ -6,8 +6,11 @@ declare module "styled-components" {
       primary: string;
       secondary: string;
       background: string;
+      backgroundOffSet: string;
+      headerBtmBorder: string;
       bgInputColor: string;
       backgroundalt: string;
+      backgroundaltrev: string;
       borderRight: string;
       text: string;
       button: string;

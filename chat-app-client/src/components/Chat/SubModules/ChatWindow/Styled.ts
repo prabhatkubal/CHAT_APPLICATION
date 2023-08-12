@@ -14,8 +14,8 @@ export const ChatWindowContainer = styled.div`
 export const ChatHeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  background: white;
-  border-bottom: 1px solid #ebebeb;
+  background-color: ${({ theme }) => theme.colors.backgroundOffSet};
+  border-bottom: ${({ theme }) => theme.colors.headerBtmBorder};
   padding: 10px;
   width: 100%;
   position: absolute;
@@ -68,6 +68,7 @@ export const ChatBubbleReceived = styled.div`
   border-radius: 12px;
   margin-right: auto;
   font-size: 12px;
+  color: #000000;
 `;
 
 export const ChatBubbleSent = styled.div`
@@ -79,7 +80,7 @@ export const ChatBubbleSent = styled.div`
   border-radius: 12px;
   margin-left: auto;
   font-size: 12px;
-  color: white;
+  color: #ffffff;
 `;
 
 export const DateDivider = styled.div`

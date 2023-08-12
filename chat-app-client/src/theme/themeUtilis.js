@@ -10,7 +10,5 @@ export const useToggleTheme = () => {
 
   const theme = isDarkMode ? darkTheme : lightTheme;
 
-  console.log("themeUtils");
-
   return { theme, toggleTheme };
 };
