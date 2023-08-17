@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 const verifyToken = require("./src/middleware/verifyToken");
 const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
+const customMiddleware = require("./src/middleware/customMiddleware");
 
 const BACKEND_PORT = process.env.PORT || 4000;
 
@@ -17,25 +18,6 @@ app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-
-// const customMiddleware = (resolve, root, args, context, info) => {
-//   if (context.req.path !== "/login" && context.req.path !== "/signup") {
-//     verifyToken(context.req, context.res, () => {});
-//   }
-//   return resolve(root, args, context, info);
-// };
-
-const customMiddleware = (req, res, next) => {
-  // console.log(req.headers.clientpathname);
-  if (
-    req.headers.clientpathname !== "/account/login" &&
-    req.headers.clientpathname !== "/account/signup"
-  ) {
-    verifyToken(req, res, next);
-  } else {
-    next();
-  }
-};
 
 //apollo server connection
 async function startApolloServer() {
@@ -126,7 +108,7 @@ async function connectDatabase() {
 
 connectDatabase();
 
-app.use(customMiddleware);
+// app.use(customMiddleware);
 
 // Catch-all error handler
 app.use((err, req, res, next) => {

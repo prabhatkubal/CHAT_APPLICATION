@@ -1,9 +1,9 @@
-import io from "socket.io-client";
-
-export const socket = io(process.env.BASE_URL, {
+const socketCredentials = {
   reconnection: false,
   withCredentials: true,
   extraHeaders: {
     "socket-custom-header": "abcd",
   },
-});
+};
+
+export default socketCredentials;

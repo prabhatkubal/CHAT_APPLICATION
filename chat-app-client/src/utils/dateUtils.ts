@@ -1,3 +1,7 @@
+interface MessagesWithTime extends Messages {
+  time: string;
+}
+
 interface Messages {
   messageId: string;
   senderId: string;
@@ -9,8 +13,8 @@ interface Messages {
 
 export const groupMessagesByDate = (
   messages: Messages[]
-): { [date: string]: Messages[] } => {
-  const groupedMessages: { [date: string]: Messages[] } = {};
+): { [date: string]: MessagesWithTime[] } => {
+  const groupedMessages: { [date: string]: MessagesWithTime[] } = {};
 
   messages.forEach((message) => {
     // Parse the timestamp string into a Date object
@@ -24,20 +28,26 @@ export const groupMessagesByDate = (
       year: "numeric",
     });
 
-    // // Format the time portion
-    // const formattedTime = date.toLocaleTimeString("en-US", {
-    //   hour: "numeric",
-    //   minute: "numeric",
-    // });
+    // Format the time portion in 12-hour format with AM/PM
+    const formattedTime = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
 
     // Combine date and time for grouping
     const fullDate = `${formattedDate}`;
+    const timeField = formattedTime; // Store the formattedTime as the key
 
-    if (groupedMessages[fullDate]) {
-      groupedMessages[fullDate].push(message);
-    } else {
-      groupedMessages[fullDate] = [message];
+    const messageWithTime: MessagesWithTime = {
+      ...message,
+      time: formattedTime,
+    };
+
+    if (!groupedMessages[fullDate]) {
+      groupedMessages[fullDate] = [];
     }
+    groupedMessages[fullDate].push(messageWithTime);
   });
 
   return groupedMessages;

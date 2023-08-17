@@ -34,7 +34,6 @@ const userTypes = gql`
     message: String!
     success: Boolean!
     user: User
-    accessToken: String
   }
 
   type SignupResponse {

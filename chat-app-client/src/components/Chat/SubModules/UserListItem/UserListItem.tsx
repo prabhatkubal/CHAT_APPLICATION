@@ -9,10 +9,12 @@ interface User {
 interface UserListItemProps {
   user: User;
   isOnline: boolean;
+  isCheckbox: boolean;
 }
 
 const UserListItemContainer = styled.div`
   display: flex;
+  width: 100%;
 `;
 
 const UserIcon = styled.div`
@@ -33,6 +35,11 @@ const UserName = styled.div`
   /* Add your styling for the user name */
 `;
 
+const Checkbox = styled.input`
+  margin-left: auto;
+  margin-bottom: 20px;
+`;
+
 const LastOnline = styled.div`
   display: block;
 `;
@@ -48,8 +55,11 @@ const OnlineIdentifier = styled.div<{ isOnline: boolean }>`
   top: 10%;
 `;
 
-const UserListItem: React.FC<UserListItemProps> = ({ user, isOnline }) => {
-  
+const UserListItem: React.FC<UserListItemProps> = ({
+  user,
+  isOnline,
+  isCheckbox = false,
+}) => {
   // const selectedUser =
   //   typeof window !== "undefined"
   //     ? JSON.parse(localStorage.getItem("selectedUser"))
@@ -59,6 +69,7 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, isOnline }) => {
     <UserListItemContainer>
       <UserIcon>{user?.name?.charAt(0)?.toUpperCase()}</UserIcon>
       <UserName>{user?.name}</UserName>
+      {isCheckbox && <Checkbox type="checkbox" />}
       {/* <LastOnline>Last Online Recently</LastOnline> */}
       <OnlineIdentifier isOnline={isOnline} />
       {/* Render the content for each user list item */}

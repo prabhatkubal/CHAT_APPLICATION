@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from "react";
 import ChatLayout from "../../Layout/ChatRoomLayout";
-import ChatList from "./SubModules/ChatList/ChatList";
-import ChatWindow from "./SubModules/ChatWindow/ChatWindow";
 import io from "socket.io-client";
 import { GET_MESSAGES } from "../../gql/queries/getUserMessages";
 import { STORE_MESSAGES } from "../../gql/mutations/storeUserMessages";
 import client from "../../api/apiInstance";
 import { useMutation } from "@apollo/client";
 import parseDateToTimestamp from "../../utils/dateUtils";
+import { GET_USERS } from "../../gql/queries/getAllUsers";
+import ChatWindow from "./Modules/ChatWindow/ChatWindow";
+import ChatList from "./Modules/ChatList/ChatList";
+import { getMessagesBySenderAndRecipientId } from "../../gql/mutations/api/getMessagesBySenderAndRecipientId";
+import { storeMessage } from "../../gql/mutations/api/storeMessages";
+import socketCredentials from "../../helpers/socketCredentials";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 
 export default function Chat() {
   const user_details =
@@ -19,6 +29,7 @@ export default function Chat() {
       ? JSON.parse(localStorage.getItem("selectedRecipient"))
       : null;
   const [socket, setSocket] = useState(null);
+  const [users, setUsers] = useState<User[]>([]);
   const [onlineUsers, setOnlineUsers] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState(null);
@@ -30,37 +41,27 @@ export default function Chat() {
   const [recipient, setRecipient] = useState(
     selectedRecipient ? selectedRecipient : null
   );
-  const [storeMessages, { loading: storeLoading, error: storeError }] =
-    useMutation(STORE_MESSAGES);
 
-  async function getMessagesBySenderAndRecipientId(senderId, recipientId) {
-    try {
-      setLoading(true);
+  //get Users List
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const { data } = await client.query({
+          query: GET_USERS,
+          fetchPolicy: "network-only",
+        });
 
-      const { data, error } = await client.query({
-        query: GET_MESSAGES,
-        variables: {
-          senderId,
-          recipientId,
-        },
-        fetchPolicy: "network-only",
-      });
-
-      if (error) {
-        console.error("Error retrieving messages:", error);
-        return;
+        const users = data.getUsers.filter(
+          (user) => user.id !== user_details?.id
+        );
+        setUsers(users);
+      } catch (error) {
+        console.error("Error fetching users:", error);
       }
+    };
 
-      const messages = data.getMessages;
-
-      setMessages([...messages]);
-      setLoading(false);
-      // Process the retrieved messages here
-    } catch (error) {
-      console.error("Error retrieving messages:", error);
-      setLoading(false);
-    }
-  }
+    fetchUsers();
+  }, []);
 
   //get messages based on chat selected
   useEffect(() => {
@@ -68,27 +69,23 @@ export default function Chat() {
       getMessagesBySenderAndRecipientId(
         parseInt(`${user_details?.id}`, 10),
         parseInt(`${recipientId}`, 10)
-      );
+      ).then(({ messages, loading }) => {
+        setMessages([...messages]);
+        setLoading(loading); // Set the loading state in your component
+      });
     }
   }, [recipientId]);
 
   // socket connection
   useEffect(() => {
-    const newSocket = io(process.env.BASE_URL, {
-      reconnection: false,
-      withCredentials: true,
-      extraHeaders: {
-        "my-custom-header": "abcd",
-      },
-    });
+    const newSocket = io(process.env.BASE_URL, socketCredentials);
     setSocket(newSocket);
   }, []);
 
-  // add online users
+  // add and get online users
   useEffect(() => {
     if (socket !== null || "") {
       socket.emit("addNewUser", user_details?.id);
-
       socket.on("getOnlineUsers", (data) => {
         setOnlineUsers(data);
       });
@@ -109,14 +106,8 @@ export default function Chat() {
         },
       ]);
 
+      //send message
       socket.emit("sendMessage", {
-        ...newMessage,
-        recipientId: recipientId,
-        senderId: user_details?.id,
-        chatId: `${recipientId}_${user_details?.id}`,
-      });
-
-      console.log("sentMessage", {
         ...newMessage,
         recipientId: recipientId,
         senderId: user_details?.id,
@@ -127,35 +118,14 @@ export default function Chat() {
         setOnlineUsers(data);
       });
 
-      // socket.on("getMessage", (res) => {
-      //   setMessages((prev) => [...prev, res]);
-      //   // getMessagesBySenderAndRecipientId(user_details?.id, recipientId);
-      // });
-      // Post message data to the "/messages" API
-      storeMessages({
-        variables: {
-          senderId: parseInt(`${user_details?.id}`, 10),
-          recipientId: parseInt(`${recipientId}`, 10),
-          chatId: `${recipientId}_${user_details?.id}`,
-          message: newMessage.message,
-          dateTime: newMessage.dateTime,
-        },
-      })
-        .then((response) => {
-          const data = response.data.storeMessages;
-          if (data.success) {
-            // Message inserted successfully
-            const insertedMessage = data.insertedMessage;
-            client.clearStore();
-          } else {
-            // Handle the error response
-            console.error("Failed to insert message:", data.message);
-          }
-        })
-        .catch((error) => {
-          // Handle any errors
-          console.error("Failed to insert message:", error);
-        });
+      //store message in db
+      storeMessage(
+        parseInt(`${user_details?.id}`, 10),
+        parseInt(`${recipientId}`, 10),
+        `${recipientId}_${user_details?.id}`,
+        newMessage.message,
+        newMessage.dateTime
+      );
     }
   }, [newMessage]);
 
@@ -209,6 +179,7 @@ export default function Chat() {
       showChatContentStatus={showChatContent}
       sidebarContent={
         <ChatList
+          users={users}
           showChatContent={showChatContent}
           onlineUsers={onlineUsers}
           getRecipient={getRecipient}
@@ -216,6 +187,7 @@ export default function Chat() {
       }
       chatContent={
         <ChatWindow
+          users={users}
           loading={loading}
           onlineUsers={onlineUsers}
           messages={messages}

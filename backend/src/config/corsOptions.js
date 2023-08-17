@@ -6,7 +6,12 @@ const corsOptions = {
     "https://studio.apollographql.com",
   ],
   methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type", "Authorization", "Clientpathname"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "Clientpathname",
+    "socket-custom-header",
+  ],
   credentials: true,
   preflight: true,
   optionsSuccessStatus: 200,

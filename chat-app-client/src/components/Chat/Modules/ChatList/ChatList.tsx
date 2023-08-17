@@ -2,22 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import Search from "../../../Common/Search";
-import HamburgerMenuIcon from "../HamburgerIcon/HamburgerIcon";
-import UserListItem from "../UserListItem/UserListItem";
 import { useToggleTheme } from "../../../../theme/themeUtilis";
 import apiInstance from "../../../../api/apiInstance";
 import axios from "axios";
 import client from "../../../../api/apiInstance";
 import { GET_USERS } from "../../../../gql/queries/getAllUsers";
+import HamburgerMenuIcon from "../../SubModules/HamburgerIcon/HamburgerIcon";
+import UserListItem from "../../SubModules/UserListItem/UserListItem";
 
 interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
   active: boolean;
-}
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
 }
 
 const TabContainer = styled.div`
@@ -48,7 +42,7 @@ const Tab = styled.div<TabProps>`
   width: fit-content;
 
   &:hover {
-    background-color: #f9f9f9;
+    background-color: ${({ theme }) => theme.colors.backgroundalt};
   }
 `;
 
@@ -82,13 +76,15 @@ const ChatListItem = styled.div`
 
 const ChatListItemContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-direction: column;
   width: 100%;
   margin-top: 10px;
+  overflow-y: scroll;
+  height: 80vh;
 `;
 
-const ChatList = ({ onlineUsers, getRecipient, showChatContent }) => {
+const ChatList = ({ users, onlineUsers, getRecipient, showChatContent }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   // const [theme, setTheme] = useState(null);
@@ -104,7 +100,6 @@ const ChatList = ({ onlineUsers, getRecipient, showChatContent }) => {
     typeof window !== "undefined"
       ? JSON.parse(localStorage.getItem("isAuthorised"))
       : null;
-  const [users, setUsers] = useState<User[]>([]);
 
   const handleClick = () => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
@@ -121,23 +116,6 @@ const ChatList = ({ onlineUsers, getRecipient, showChatContent }) => {
           pathname: "/chat",
         })
       : null;
-  }, []);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const { data } = await client.query({ query: GET_USERS });
-
-        const users = data.getUsers.filter(
-          (user) => user.id !== user_details?.id
-        );
-        setUsers(users);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-
-    fetchUsers();
   }, []);
 
   const handleTabClick = (tab) => {
@@ -195,6 +173,7 @@ const ChatList = ({ onlineUsers, getRecipient, showChatContent }) => {
               <UserListItem
                 user={{ id: item.id.toString(), name: item.name }}
                 isOnline={onlineUsers?.some((user) => user?.id === item.id)}
+                isCheckbox={false}
               />
             </ChatListItem>
           ))}

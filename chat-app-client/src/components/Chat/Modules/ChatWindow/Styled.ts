@@ -57,10 +57,13 @@ export const ChatInputContainer = styled.div`
   bottom: -5%;
   background: transparent;
 `;
+export const ChatBubbleContainer = styled.div`
+  position: relative;
+`;
 
 export const ChatBubbleReceived = styled.div`
   width: max-content;
-  height: 40px;
+  height: 50px;
   background: white;
   border: 1px solid #e1dcdc;
   margin-bottom: 15px;
@@ -69,11 +72,14 @@ export const ChatBubbleReceived = styled.div`
   margin-right: auto;
   font-size: 12px;
   color: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 `;
 
 export const ChatBubbleSent = styled.div`
   width: max-content;
-  height: 40px;
+  height: 50px;
   background: #2a85ff;
   margin-bottom: 15px;
   padding: 10px;
@@ -81,6 +87,14 @@ export const ChatBubbleSent = styled.div`
   margin-left: auto;
   font-size: 12px;
   color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+`;
+
+export const ChatTimeText = styled.span`
+  width: fit-content;
+  font-size: 10px;
 `;
 
 export const DateDivider = styled.div`
@@ -100,4 +114,22 @@ export const Line = styled.div`
   flex-grow: 1;
   height: 1px;
   background-color: #e3dbdb;
+`;
+
+export const ContextMenu = styled.div`
+  position: absolute;
+  background-color: ${({ theme }) => theme.colors.backgroundOffSet};
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 4px;
+  z-index: 999;
+`;
+
+export const ContextMenuItem = styled.div`
+border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.backgroundalt};
+  }
 `;

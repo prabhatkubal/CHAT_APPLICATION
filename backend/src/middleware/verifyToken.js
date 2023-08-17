@@ -10,7 +10,9 @@ async function verifyToken(req, res, next) {
     req?.cookies?.jwt;
 
   if (!token) {
-    return res.status(401).json({ message: "No token provided", success: false });
+    return res
+      .status(401)
+      .json({ message: "No token provided", success: false });
   }
 
   // Verify the token
@@ -22,7 +24,9 @@ async function verifyToken(req, res, next) {
       const user = await User.findOne({ where: { uuid: decodedValue.id } });
 
       if (!user) {
-        return res.status(401).json({ message: "User not found", success: false });
+        return res
+          .status(401)
+          .json({ message: "User not found", success: false });
       }
 
       if (!user.refresh_token) {

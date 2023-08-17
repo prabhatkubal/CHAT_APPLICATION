@@ -31,6 +31,15 @@ const messageTypes = gql`
     message: String!
     insertedMessage: Message
   }
+
+  type Mutation {
+    deleteMessage(messageId: String!, chatId: String!): DeleteMessageResponse!
+  }
+
+  type DeleteMessageResponse {
+    success: Boolean!
+    message: String!
+  }
 `;
 
 module.exports = messageTypes;

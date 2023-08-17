@@ -63,7 +63,6 @@ const loginUser = {
             name: user.name,
             email: user.email,
           },
-          accessToken,
         };
       } catch (err) {
         console.error("Error during login:", err);

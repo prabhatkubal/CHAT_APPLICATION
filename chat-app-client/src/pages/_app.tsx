@@ -31,9 +31,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <ThemeContextProvider>
           <ThemeProvider theme={theme}>
             <GlobalStyle />
-            <ToggleThemeButton onClick={toggleTheme}>
+            {/* <ToggleThemeButton onClick={toggleTheme}>
               Toggle Theme
-            </ToggleThemeButton>
+            </ToggleThemeButton> */}
             <Component {...pageProps} />
           </ThemeProvider>
         </ThemeContextProvider>

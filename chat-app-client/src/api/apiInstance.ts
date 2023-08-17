@@ -12,12 +12,10 @@ const authLink = setContext(async (_, { headers }) => {
   if (typeof window !== "undefined") {
     path = window.location.pathname;
   }
-  const token = localStorage.getItem("token");
   return {
     headers: {
       ...headers,
       clientpathname: path,
-      // authorization: token ? `Bearer ${token}` : "",
     },
   };
 });
