@@ -1,7 +1,13 @@
-import client from "../../../api/apiInstance";
-import { STORE_MESSAGES } from "../storeUserMessages";
+import client from "../../../../services/apiInstance";
+import { STORE_MESSAGES } from "../../messages/storeUserMessages";
 
-export async function storeMessage(senderId, recipientId, chatId, message, dateTime) {
+export async function storeMessage(
+  senderId,
+  recipientId,
+  chatId,
+  message,
+  dateTime
+) {
   try {
     const response = await client.mutate({
       mutation: STORE_MESSAGES,
@@ -28,6 +34,9 @@ export async function storeMessage(senderId, recipientId, chatId, message, dateT
   } catch (error) {
     // Handle any errors
     console.log("Failed to insert message:", error);
-    return { success: false, message: "An error occurred while inserting the message." };
+    return {
+      success: false,
+      message: "An error occurred while inserting the message.",
+    };
   }
 }

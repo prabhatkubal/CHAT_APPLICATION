@@ -1,5 +1,5 @@
-import client from "../../../api/apiInstance";
-import { GET_MESSAGES } from "../../queries/getUserMessages";
+import client from "../../../../services/apiInstance";
+import { GET_MESSAGES } from "../../../queries/messages/getUserMessages";
 
 export async function getMessagesBySenderAndRecipientId(senderId, recipientId) {
   let loading = false; // Initialize loading status

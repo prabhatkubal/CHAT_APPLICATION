@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ChatLayout from "../../Layout/ChatRoomLayout";
 import io from "socket.io-client";
-import { GET_MESSAGES } from "../../gql/queries/getUserMessages";
-import { STORE_MESSAGES } from "../../gql/mutations/storeUserMessages";
-import client from "../../api/apiInstance";
-import { useMutation } from "@apollo/client";
 import parseDateToTimestamp from "../../utils/dateUtils";
-import { GET_USERS } from "../../gql/queries/getAllUsers";
+import { GET_USERS } from "../../gql/queries/users/getAllUsers";
 import ChatWindow from "./Modules/ChatWindow/ChatWindow";
 import ChatList from "./Modules/ChatList/ChatList";
-import { getMessagesBySenderAndRecipientId } from "../../gql/mutations/api/getMessagesBySenderAndRecipientId";
-import { storeMessage } from "../../gql/mutations/api/storeMessages";
+import { getMessagesBySenderAndRecipientId } from "../../gql/mutations/api/messages/getMessagesBySenderAndRecipientId";
+import { storeMessage } from "../../gql/mutations/api/messages/storeMessages";
 import socketCredentials from "../../helpers/socketCredentials";
+import client from "../../services/apiInstance";
 
 interface User {
   id: number;
@@ -70,6 +67,7 @@ export default function Chat() {
         parseInt(`${user_details?.id}`, 10),
         parseInt(`${recipientId}`, 10)
       ).then(({ messages, loading }) => {
+        setMessages([]);
         setMessages([...messages]);
         setLoading(loading); // Set the loading state in your component
       });
@@ -95,6 +93,7 @@ export default function Chat() {
   // send message
   useEffect(() => {
     if (socket !== null) {
+      console.log("####################Socket emit#####################")
       setMessages((prev) => [
         ...prev,
         {
@@ -133,6 +132,7 @@ export default function Chat() {
   useEffect(() => {
     if (socket !== null) {
       socket.on("getMessage", (res) => {
+        console.log("####################Socket on get#####################")
         setMessages((prev) => [
           ...prev,
           {
@@ -187,6 +187,7 @@ export default function Chat() {
       }
       chatContent={
         <ChatWindow
+          updateMesssages={setMessages}
           users={users}
           loading={loading}
           onlineUsers={onlineUsers}

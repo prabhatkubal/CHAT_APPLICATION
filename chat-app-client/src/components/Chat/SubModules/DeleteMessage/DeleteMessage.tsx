@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "../../../Common/Button";
 import { useMutation } from "@apollo/client";
-import { DELETE_MESSAGE } from "../../../../gql/mutations/deleteMessage";
-import client from "../../../../api/apiInstance";
+import { DELETE_MESSAGE } from "../../../../gql/mutations/messages/deleteMessage";
+import client from "../../../../services/apiInstance";
 
 const PopupContainer = styled.div`
   position: fixed;
@@ -36,7 +36,7 @@ interface DeletMessagePopupProps {
   popupVisible: boolean;
   MessageInfo: MessageInfo;
   onCancel: () => void;
-  onConfirm: () => void;
+  onConfirm: (MessageInfo: MessageInfo) => void;
 }
 
 const DeleteMessage: React.FC<DeletMessagePopupProps> = ({
@@ -54,7 +54,7 @@ const DeleteMessage: React.FC<DeletMessagePopupProps> = ({
   const handleConfirm = () => {
     console.log(MessageInfo);
     handleDeleteMessage(MessageInfo.messageId, MessageInfo.chatId);
-    onConfirm();
+    onConfirm(MessageInfo);
   };
 
   const handleDeleteMessage = async (messageId, chatId) => {

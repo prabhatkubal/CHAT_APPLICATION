@@ -11,10 +11,10 @@ import {
 import Input from "../../../components/Common/Input";
 import Button from "../../../components/Common/Button";
 import InfoMessage from "../../Common/InfoMessage";
-import apiInstance from "../../../api/apiInstance";
+import apiInstance from "../../../services/apiInstance";
 import { LOGIN_USER } from "../../../gql/mutations/auth/loginUser";
 import { useMutation } from "@apollo/client";
-import client from "../../../api/apiInstance";
+import client from "../../../services/apiInstance";
 
 export default function Login() {
   const [loginUser, { loading: loginLoading, error: loginError }] =

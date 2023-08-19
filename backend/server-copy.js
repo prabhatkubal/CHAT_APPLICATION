@@ -11,7 +11,6 @@ const corsOptions = require("./config/corsOptions");
 const socketIoOperations = require("./services/messaging/socketioOperations");
 
 const BACKEND_PORT = process.env.PORT || 4000;
-// const WEB_SOCKET_PORT = 5000;
 
 const app = express();
 const server = http.createServer(app);

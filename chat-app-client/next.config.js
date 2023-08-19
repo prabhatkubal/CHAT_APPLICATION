@@ -14,4 +14,16 @@ module.exports = {
     BASE_URL: "http://localhost:4000",
     WEB_SOCKET: "http://localhost:5000",
   },
+  generateEtags: false,
+  headers: () => [
+    {
+      source: "/chat/:path*",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "no-store",
+        },
+      ],
+    },
+  ],
 };

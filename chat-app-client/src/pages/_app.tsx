@@ -6,7 +6,7 @@ import GlobalStyle from "../styles/globalstyles";
 import { CustomTheme, lightTheme, darkTheme } from "../styles/theme";
 import { useToggleTheme } from "../theme/themeUtilis";
 import { ApolloProvider } from "@apollo/client";
-import client from "../api/apiInstance";
+import client from "../services/apiInstance";
 import { GetServerSideProps } from "next";
 import { ThemeContextProvider } from "../theme/themeContext";
 

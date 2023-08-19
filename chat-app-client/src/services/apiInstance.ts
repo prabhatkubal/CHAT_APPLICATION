@@ -1,20 +1,28 @@
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
-// import axios from "axios";
+let path;
 
-// const baseURL = process.env.BASE_URL;
+const httpLink = createHttpLink({
+  uri: "http://localhost:4000/graphql", // Replace with your GraphQL server URL
+  credentials: "include",
+});
 
-// const api = {
-//   get: async (url) => {
-//     const response = await axios.get(`${baseURL}${url}`);
-//     return response.data;
-//   },
+const authLink = setContext(async (_, { headers }) => {
+  if (typeof window !== "undefined") {
+    path = window.location.pathname;
+  }
+  return {
+    headers: {
+      ...headers,
+      clientpathname: path,
+    },
+  };
+});
 
-//   post: async (url, body) => {
-//     const response = await axios.post(`${baseURL}${url}`, body);
-//     return response.data;
-//   },
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
 
-//   // Add other HTTP methods (put, patch, delete, etc.) if needed
-// };
-
-// export default api;
+export default client;

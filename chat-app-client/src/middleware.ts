@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getPathFromUrl } from "./utils/getUrlDetails";
-import { routeAllowedWithoutLogin } from "./pages/constants/routeAllowedWithoutLogin";
-import { Chat, Login } from "./pages/constants/paths";
+import { routeAllowedWithoutLogin } from "./constants/routeAllowedWithoutLogin";
+import { Chat, Login } from "./constants/paths";
 
 const middleware = async (req: NextRequest) => {
   const csrfToken = req?.cookies.get("csrfToken")?.value;

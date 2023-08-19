@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface MessageData {
   message: string;
   dateTime: Date;
@@ -18,6 +20,7 @@ export interface Recipient {
 }
 
 export interface ChatWindowProps {
+  updateMesssages: Dispatch<SetStateAction<Messages[]>>;
   emitMessage: (data: MessageData) => void;
   users: object;
   chatExit: () => void;

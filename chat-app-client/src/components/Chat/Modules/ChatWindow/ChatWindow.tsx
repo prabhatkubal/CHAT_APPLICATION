@@ -41,6 +41,7 @@ const DateDividerWithLine = ({ date }) => {
 };
 
 const ChatWindow: React.FC<ChatWindowProps> = ({
+  updateMesssages,
   users,
   emitMessage,
   messages,
@@ -72,9 +73,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   const [hydrated, setHydrated] = useState(false);
 
   const user_details =
-  typeof window !== "undefined"
-    ? JSON.parse(localStorage.getItem("user_details"))
-    : null;
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("user_details"))
+      : null;
 
   useEffect(() => {
     setHydrated(true);
@@ -197,7 +198,13 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   //   });
   // });
 
-  // console.log(messages);
+  function deleteAndUpdateMessages(messages, chatId, messageId) {
+    const updatedMessages = messages.filter((message) => {
+      return !(message.chatId === chatId && message.messageId === messageId);
+    });
+
+    return updatedMessages;
+  }
 
   return (
     <ChatWindowContainer ref={chatWindowRef}>
@@ -258,7 +265,15 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
             MessageInfo={optionedMessage}
             popupVisible={deletePopupVisibility}
             onCancel={handleDeleteMessagePopupClose}
-            onConfirm={() => setDeletePopupVisibility(false)}
+            onConfirm={(MessageInfo) => {
+              const updatedMessages = deleteAndUpdateMessages(
+                messages,
+                MessageInfo.chatId,
+                MessageInfo.messageId
+              );
+              updateMesssages(updatedMessages);
+              setDeletePopupVisibility(false);
+            }}
           />
         </ChatContentContainer>
       ) : null}
