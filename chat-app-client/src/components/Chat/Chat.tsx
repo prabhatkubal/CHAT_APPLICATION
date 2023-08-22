@@ -9,6 +9,7 @@ import { getMessagesBySenderAndRecipientId } from "../../gql/mutations/api/messa
 import { storeMessage } from "../../gql/mutations/api/messages/storeMessages";
 import socketCredentials from "../../helpers/socketCredentials";
 import client from "../../services/apiInstance";
+import { useQuery } from "@apollo/client";
 
 interface User {
   id: number;
@@ -38,6 +39,8 @@ export default function Chat() {
   const [recipient, setRecipient] = useState(
     selectedRecipient ? selectedRecipient : null
   );
+
+  const { data, client: getUsersClient } = useQuery(GET_USERS);
 
   //get Users List
   useEffect(() => {
@@ -93,7 +96,7 @@ export default function Chat() {
   // send message
   useEffect(() => {
     if (socket !== null) {
-      console.log("####################Socket emit#####################")
+      console.log("####################Socket emit#####################");
       setMessages((prev) => [
         ...prev,
         {
@@ -132,7 +135,7 @@ export default function Chat() {
   useEffect(() => {
     if (socket !== null) {
       socket.on("getMessage", (res) => {
-        console.log("####################Socket on get#####################")
+        console.log("####################Socket on get#####################");
         setMessages((prev) => [
           ...prev,
           {
@@ -172,6 +175,7 @@ export default function Chat() {
 
   const chatExit = () => {
     setShowChatContent(false);
+    getUsersClient.resetStore();
   };
 
   return (

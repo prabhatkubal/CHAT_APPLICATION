@@ -3,11 +3,23 @@ const User = require("../../models").User;
 const {
   generateAccessToken,
   generateRefreshToken,
-} = require("../../src/services/generateTokenService");
+} = require("../../src/services/Tokens/generateTokenService");
 
 const loginUser = {
   Mutation: {
-    login: async (_, { email, password }, { res }) => {
+    login: async (_, { email, password }, { req, res }) => {
+      // const userAgent = useragent.parse(req.headers["user-agent"]);
+      const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+      console.log(
+        {
+          // userAgent: userAgent.toString(),
+          ipAddress: req.ip,
+          // location: city, region, country, loc,
+          // coordinates: loc.split(","),
+          // ... other login data ...
+        },
+        "#################################################"
+      );
       try {
         // Validate inputs
         let errors = {};
@@ -37,7 +49,7 @@ const loginUser = {
           throw new Error("Password is incorrect");
         }
 
-        console.log(user, "theuser")
+        console.log(user, "theuser");
 
         // Generate access token and refresh token
         const accessToken = generateAccessToken(user);
@@ -47,7 +59,6 @@ const loginUser = {
         await user.update({ refresh_token: refreshToken });
 
         res.cookie("jwt", accessToken, {
-          
           httpOnly: true,
           secure: process.env.NODE_ENV === "production", // Set 'secure' based on your environment
           maxAge: 3600000, // Specify the expiration time in milliseconds

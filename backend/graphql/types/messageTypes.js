@@ -39,6 +39,7 @@ const messageTypes = gql`
   type DeleteMessageResponse {
     success: Boolean!
     message: String!
+    status: String!
   }
 `;
 

@@ -123,6 +123,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
       messageId: data?.messageId,
       chatId: data?.chatId,
     });
+    console.log(data);
     e.preventDefault();
     setContextMenuVisible(true);
     if (messageType === 0) {
@@ -233,20 +234,20 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
               {groupedMessages[date].map((item, index) => (
                 <React.Fragment key={index}>
                   {item.recipientId == user_details?.id && (
-                    <div onContextMenu={(e) => handleContextMenu(e, item, 0)}>
-                      <ChatBubbleReceived>
-                        {item.message}
-                        <ChatTimeText>{item.time}</ChatTimeText>
-                      </ChatBubbleReceived>
-                    </div>
+                    <ChatBubbleReceived
+                      onContextMenu={(e) => handleContextMenu(e, item, 0)}
+                    >
+                      {item.message}
+                      <ChatTimeText>{item.time}</ChatTimeText>
+                    </ChatBubbleReceived>
                   )}
                   {item.senderId == user_details?.id && (
-                    <div onContextMenu={(e) => handleContextMenu(e, item, 1)}>
-                      <ChatBubbleSent>
-                        {item.message}
-                        <ChatTimeText>{item.time}</ChatTimeText>
-                      </ChatBubbleSent>
-                    </div>
+                    <ChatBubbleSent
+                      onContextMenu={(e) => handleContextMenu(e, item, 1)}
+                    >
+                      {item.message}
+                      <ChatTimeText>{item.time}</ChatTimeText>
+                    </ChatBubbleSent>
                   )}
                 </React.Fragment>
               ))}
@@ -279,6 +280,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
       ) : null}
       <ChatInputContainer>
         <Search
+          borderRadius={false}
           value={state.message}
           placeholder="Search"
           onChange={(e) => {

@@ -6,10 +6,9 @@ const { sequelize } = require("./models");
 const { Server } = require("socket.io");
 const corsOptions = require("./src/config/corsOptions");
 const cookieParser = require("cookie-parser");
-const verifyToken = require("./src/middleware/verifyToken");
 const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
-const customMiddleware = require("./src/middleware/customMiddleware");
+const { customMiddleware } = require("./src/middlewares");
 
 const BACKEND_PORT = process.env.PORT || 4000;
 
@@ -108,7 +107,7 @@ async function connectDatabase() {
 
 connectDatabase();
 
-// app.use(customMiddleware);
+app.use(customMiddleware);
 
 // Catch-all error handler
 app.use((err, req, res, next) => {

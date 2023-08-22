@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { generateAccessToken } = require("../services/generateTokenService");
+const { generateAccessToken } = require("../services/Tokens/generateTokenService");
 const User = require("../../models").User;
 
 async function verifyToken(req, res, next) {

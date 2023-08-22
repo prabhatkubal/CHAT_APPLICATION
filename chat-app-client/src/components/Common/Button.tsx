@@ -12,7 +12,7 @@ const StyledButton = styled.button`
   &:hover {
     border-color: lightgray;
     outline: none;
-    background: lightgray;
+    background-color: ${({ theme }) => theme.colors.backgroundalt};
   }
 `;
 

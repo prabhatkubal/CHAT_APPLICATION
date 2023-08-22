@@ -52,9 +52,9 @@ export const ChatContentContainer = styled.div`
 export const ChatInputContainer = styled.div`
   display: flex;
   width: 100%;
-  padding: 15px 25px 5px 15px;
   position: absolute;
   bottom: -5%;
+  left: 0%;
   background: transparent;
 `;
 export const ChatBubbleContainer = styled.div`

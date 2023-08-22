@@ -1,4 +1,8 @@
 const Message = require("../../models").Message;
+const {
+  HTTP_NO_CONTENT,
+  HTTP_OK,
+} = require("../../src/constants/httpStatusCodes");
 
 const deleteMessage = async (_, { messageId, chatId }) => {
   try {
@@ -13,6 +17,7 @@ const deleteMessage = async (_, { messageId, chatId }) => {
       return {
         success: false,
         message: "Message not found",
+        status: HTTP_NO_CONTENT,
       };
     }
 
@@ -20,6 +25,7 @@ const deleteMessage = async (_, { messageId, chatId }) => {
     return {
       success: true,
       message: "Message deleted successfully",
+      status: HTTP_OK,
     };
   } catch (err) {
     console.error("Error deleting message:", err);

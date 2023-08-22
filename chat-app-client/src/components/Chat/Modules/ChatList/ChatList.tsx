@@ -6,7 +6,6 @@ import { useToggleTheme } from "../../../../theme/themeUtilis";
 import apiInstance from "../../../../services/apiInstance";
 import axios from "axios";
 import client from "../../../../services/apiInstance";
-import { GET_USERS } from "../../../../gql/queries/getAllUsers";
 import HamburgerMenuIcon from "../../SubModules/HamburgerIcon/HamburgerIcon";
 import UserListItem from "../../SubModules/UserListItem/UserListItem";
 
@@ -60,6 +59,7 @@ const ChatListContainer = styled.div`
 const ChatListControls = styled.div`
   display: flex;
   margin: 0.5rem 0.5rem 0rem 0.5rem;
+  margin-bottom: 10px;
 `;
 
 const ChatListItem = styled.div`
@@ -132,7 +132,11 @@ const ChatList = ({ users, onlineUsers, getRecipient, showChatContent }) => {
           onOutsideClick={() => setIsOpen(false)}
         />
         &nbsp;&nbsp;
-        <Search placeholder="Search" onChange={(e) => null} />
+        <Search
+          borderRadius={true}
+          placeholder="Search"
+          onChange={(e) => null}
+        />
       </ChatListControls>
       <TabContainer>
         <Tab

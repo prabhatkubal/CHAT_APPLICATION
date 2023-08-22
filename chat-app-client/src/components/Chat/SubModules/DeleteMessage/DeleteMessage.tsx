@@ -14,17 +14,22 @@ const PopupContainer = styled.div`
   border: 1px solid gray;
   padding: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: ${({ theme }) => theme.colors.backgroundOffSet};
   z-index: 1000;
+  border-radius: 12px;
 `;
 
 const Message = styled.p`
   margin-bottom: 10px;
+  margin-top: 0px;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-evenly;
   margin-top: 10px;
+  width: 100%;
+
 `;
 
 interface MessageInfo {

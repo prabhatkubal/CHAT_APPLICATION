@@ -5,6 +5,7 @@ export const DELETE_MESSAGE = gql`
     deleteMessage(messageId: $messageId, chatId: $chatId) {
       success
       message
+      status
     }
   }
 `;

@@ -1,11 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-const StyledSearchInput = styled.input`
+interface StyledSearchInputProps extends React.HTMLAttributes<HTMLDivElement> {
+  rounded: boolean;
+}
+
+const StyledSearchInput = styled.input<StyledSearchInputProps>`
   width: 100%;
-  margin-bottom: 10px;
   font-size: 15px;
-  border-radius: 5px;
+  border-radius: ${(props) => (props.rounded ? "5px" : "none")};
   border: 1px solid grey;
   padding: 5px 5px;
   background-color: ${({ theme }) => theme.colors.bgInputColor};
@@ -19,6 +22,7 @@ const StyledSearchInput = styled.input`
 `;
 
 interface SearchProps {
+  borderRadius: boolean;
   placeholder: string;
   value?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -30,9 +34,11 @@ const Search: React.FC<SearchProps> = ({
   value,
   onChange,
   onKeyDown,
+  borderRadius,
 }) => {
   return (
     <StyledSearchInput
+      rounded={borderRadius}
       type="text"
       placeholder={placeholder}
       value={value}
