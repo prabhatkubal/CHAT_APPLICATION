@@ -24,6 +24,13 @@ async function startApolloServer() {
     typeDefs,
     resolvers,
     context: ({ req, res }) => ({ req, res }),
+    // context: async ({ req }) => {
+    //   // Get the user object from the token using your authentication logic
+    //   const user = await getUserFromToken(req);
+
+    //   // Attach the user object to the context along with the req and res objects
+    //   return { user, req, res: req.res };
+    // },
   });
 
   await server.start();
@@ -107,7 +114,7 @@ async function connectDatabase() {
 
 connectDatabase();
 
-app.use(customMiddleware);
+// app.use(customMiddleware);
 
 // Catch-all error handler
 app.use((err, req, res, next) => {

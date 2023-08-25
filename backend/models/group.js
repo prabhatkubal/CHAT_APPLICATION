@@ -1,50 +1,39 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class Group extends Model {
     static associate(models) {
       // Define association with Member model
-      User.hasMany(models.Member, { foreignKey: "userId" });
+      Group.hasMany(models.Member, { foreignKey: "groupId" });
 
       // Define association with GroupMessage model
-      User.hasMany(models.GroupMessage, { foreignKey: "senderId" });
+      Group.hasMany(models.GroupMessage, { foreignKey: "groupId" });
     }
   }
-  User.init(
+  Group.init(
     {
-      id: {
+      groupId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      uuid: {
-        type: DataTypes.UUID,
-      },
-      name: {
+      groupName: {
         type: DataTypes.STRING(200),
         allowNull: false,
       },
-      email: {
-        type: DataTypes.STRING(200),
+      adminId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
-      },
-      password: {
-        type: DataTypes.STRING(200),
-        allowNull: false,
-      },
-      refresh_token: {
-        type: DataTypes.TEXT,
       },
     },
     {
       sequelize,
-      modelName: "User",
-      tableName: "users",
+      modelName: "Group",
+      tableName: "groups",
       timestamps: true,
       updatedAt: "updatedAt",
     }
   );
-  return User;
+  return Group;
 };

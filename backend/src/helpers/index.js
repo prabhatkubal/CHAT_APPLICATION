@@ -1,4 +1,5 @@
+const getUserAgent = require("./getUserAgent");
+
 module.exports = {
-  //User Agent Service
-  userAgentService: require("./getUserAgent"),
+  getUserAgent,
 };

@@ -1,18 +1,18 @@
 const bcrypt = require("bcrypt");
-const User = require("../../models").User;
+const { User } = require("../../../models");
 const {
   generateAccessToken,
   generateRefreshToken,
-} = require("../../src/services/Tokens/generateTokenService");
+} = require("../../../src/services/Tokens/generateTokenService");
+const { getUserAgent } = require("../../../src/helpers");
 
 const loginUser = {
   Mutation: {
     login: async (_, { email, password }, { req, res }) => {
-      // const userAgent = useragent.parse(req.headers["user-agent"]);
-      const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+      const userAgent = getUserAgent(req.headers["user-agent"]);
       console.log(
         {
-          // userAgent: userAgent.toString(),
+          userAgent: userAgent,
           ipAddress: req.ip,
           // location: city, region, country, loc,
           // coordinates: loc.split(","),

@@ -1,29 +1,20 @@
-"use strict";
-/** @type {import('sequelize-cli').Migration} */
+'use strict';
+
 module.exports = {
-  async up(queryInterface, DataTypes) {
-    await queryInterface.createTable("messages", {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-      },
-      messageId: {
+  up: async (queryInterface, DataTypes) => {
+    await queryInterface.createTable('group_messages', {
+      groupMessageId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
+      groupId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       senderId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      recipientId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      chatId: {
-        type: DataTypes.STRING(50),
         allowNull: false,
       },
       message: {
@@ -44,7 +35,8 @@ module.exports = {
       },
     });
   },
-  async down(queryInterface, DataTypes) {
-    await queryInterface.dropTable("messages");
+
+  down: async (queryInterface, DataTypes) => {
+    await queryInterface.dropTable('group_messages');
   },
 };

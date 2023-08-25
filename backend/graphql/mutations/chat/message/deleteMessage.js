@@ -1,8 +1,8 @@
-const Message = require("../../models").Message;
+const { Message } = require("../../../../models");
 const {
   HTTP_NO_CONTENT,
   HTTP_OK,
-} = require("../../src/constants/httpStatusCodes");
+} = require("../../../../src/constants/httpStatusCodes");
 
 const deleteMessage = async (_, { messageId, chatId }) => {
   try {

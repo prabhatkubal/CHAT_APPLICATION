@@ -2,46 +2,49 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, DataTypes) {
-    await queryInterface.createTable("users", {
+    await queryInterface.createTable("messages", {
       id: {
+        allowNull: false,
+        autoIncrement: true,
+        type: DataTypes.INTEGER,
+      },
+      messageId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      uuid: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-      },
-      name: {
-        type: DataTypes.STRING(200),
+      senderId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
-      email: {
-        type: DataTypes.STRING(200),
-        allowNull: false,
-        unique: true,
-      },
-      password: {
-        type: DataTypes.STRING(200),
+      recipientId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
-      refresh_token: {
+      chatId: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+      },
+      message: {
         type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      dateTime: {
+        type: DataTypes.DATE,
+        allowNull: false,
       },
       createdAt: {
-        type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
+        type: DataTypes.DATE,
       },
       updatedAt: {
-        type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
+        type: DataTypes.DATE,
       },
     });
   },
   async down(queryInterface, DataTypes) {
-    await queryInterface.dropTable("users");
+    await queryInterface.dropTable("messages");
   },
 };
