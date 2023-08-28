@@ -4,9 +4,8 @@ module.exports = {
   up: async (queryInterface, DataTypes) => {
     await queryInterface.createTable('groups', {
       groupId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false,
       },
       groupName: {

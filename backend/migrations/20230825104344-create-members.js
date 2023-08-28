@@ -10,7 +10,8 @@ module.exports = {
         allowNull: false,
       },
       groupId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         allowNull: false,
       },
       userId: {

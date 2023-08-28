@@ -2,7 +2,7 @@ const { gql } = require("apollo-server-express");
 
 const groupTypes = gql`
   type Group {
-    groupId: ID!
+    groupId: String
     groupName: String!
     adminId: Int!
     members: [Member!]!
@@ -12,13 +12,16 @@ const groupTypes = gql`
   }
 
   extend type Mutation {
-    createGroup(groupName: String!, userId: Int!): CreateGroupResponse!
+    createGroup(
+      groupId: String
+      groupName: String!
+      adminId: Int!
+    ): CreateGroupResponse!
   }
 
   type CreateGroupResponse {
     message: String!
     success: Boolean!
-    group: Group
   }
 `;
 

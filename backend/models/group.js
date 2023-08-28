@@ -13,10 +13,8 @@ module.exports = (sequelize, DataTypes) => {
   Group.init(
     {
       groupId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
       },
       groupName: {
         type: DataTypes.STRING(200),

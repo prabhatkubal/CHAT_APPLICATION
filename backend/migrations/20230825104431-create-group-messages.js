@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, DataTypes) => {
-    await queryInterface.createTable('group_messages', {
+    await queryInterface.createTable("group_messages", {
       groupMessageId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -10,7 +10,8 @@ module.exports = {
         allowNull: false,
       },
       groupId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         allowNull: false,
       },
       senderId: {
@@ -37,6 +38,6 @@ module.exports = {
   },
 
   down: async (queryInterface, DataTypes) => {
-    await queryInterface.dropTable('group_messages');
+    await queryInterface.dropTable("group_messages");
   },
 };
