@@ -1,4 +1,4 @@
-const { Group, User } = require("../../../../models");
+const { Group, User, Member } = require("../../../../models");
 const { v4: uuidv4 } = require("uuid");
 const NotFoundError = require("../../../errors/NotFound/NotFoundError");
 
@@ -32,6 +32,13 @@ const createGroup = {
         console.log("Created group:", group);
 
         if (group) {
+          await Member.create({
+            groupId: uuid,
+            userId: adminId,
+            adminId: adminId,
+            adminName: adminUser.name,
+            isAdmin: true,
+          });
           return {
             message: "Group created successfully",
             success: true,

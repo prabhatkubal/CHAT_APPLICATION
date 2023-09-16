@@ -3,6 +3,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Group extends Model {
     static associate(models) {
+      Group.belongsTo(models.User, { as: "admin", foreignKey: "adminId" });
       // Define association with Member model
       Group.hasMany(models.Member, { foreignKey: "groupId" });
 

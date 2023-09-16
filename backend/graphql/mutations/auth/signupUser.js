@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
-const { user } = require("../../../models");
+const { User } = require("../../../models");
 
 const signupUser = {
   Mutation: {
@@ -22,8 +22,13 @@ const signupUser = {
         }
 
         // Check if email is already registered
-        const existingUser = await user.findOne({ where: { email } });
+        const existingUser = await User.findOne({ where: { email } });
+        console.log(existingUser, "###############");
         if (existingUser) {
+          return {
+            message: "Email already registered",
+            success: false,
+          };
           throw new Error("Email already registered");
         }
 

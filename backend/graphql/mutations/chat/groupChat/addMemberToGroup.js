@@ -8,7 +8,7 @@ const NotFoundError = require("../../../errors/NotFound/NotFoundError");
 // Mutation to add a member to a group
 const addMemberToGroup = {
   Mutation: {
-    addMemberToGroup: async (_, { groupId, userId }, { user }) => {
+    addMemberToGroup: async (_, { groupId, userId, adminId }) => {
       try {
         const group = await Group.findByPk(groupId);
 
@@ -18,11 +18,11 @@ const addMemberToGroup = {
         }
 
         //Check if user found or not
-        const user = await User.findByPk(userId, {
+        const existingUser = await User.findByPk(userId, {
           include: [
             {
               model: Member,
-              required: true, // Ensures the user is associated with a member
+              required: false, // Ensures the user is associated with a member
             },
             {
               model: GroupMessage,
@@ -30,12 +30,12 @@ const addMemberToGroup = {
             },
           ],
         });
-        if (!user) {
+        if (!existingUser) {
           throw new NotFoundError("User", `ID ${userId}`);
         }
 
         // Check if the user making the request is the admin
-        if (group.adminId !== userId) {
+        if (group.adminId !== adminId) {
           throw new AuthenticationError(
             "Group cannot be created by a non existing user"
           );
@@ -49,8 +49,12 @@ const addMemberToGroup = {
           throw new ResourceAlreadyExistsError(`Member`, `userID: ${userId}`); // Throw the custom error
         }
 
+        const admin = await Member.findOne({
+          where: { adminId },
+        });
+
         // Associate the user with the group
-        await Member.create({ groupId, userId });
+        await Member.create({ groupId, userId, adminId, adminName: existingUser.name });
 
         return {
           success: true,

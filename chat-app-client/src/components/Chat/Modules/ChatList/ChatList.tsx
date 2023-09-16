@@ -8,6 +8,7 @@ import axios from "axios";
 import client from "../../../../services/apiInstance";
 import HamburgerMenuIcon from "../../SubModules/HamburgerIcon/HamburgerIcon";
 import UserListItem from "../../SubModules/UserListItem/UserListItem";
+import ChatListItems from "../ChatListItems/ChatListItems";
 
 interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
   active: boolean;
@@ -60,28 +61,6 @@ const ChatListControls = styled.div`
   display: flex;
   margin: 0.5rem 0.5rem 0rem 0.5rem;
   margin-bottom: 10px;
-`;
-
-const ChatListItem = styled.div`
-  position: relative;
-  margin-bottom: 10px;
-  height: 55px;
-  background: transparent;
-  padding: 8px 10px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  border-radius: 10px;
-`;
-
-const ChatListItemContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-  width: 100%;
-  margin-top: 10px;
-  overflow-y: scroll;
-  height: 80vh;
 `;
 
 const ChatList = ({ users, onlineUsers, getRecipient, showChatContent }) => {
@@ -161,27 +140,14 @@ const ChatList = ({ users, onlineUsers, getRecipient, showChatContent }) => {
         {/* Add more tabs as needed */}
       </TabContainer>
       {activeTab === "Chat" && (
-        <ChatListItemContainer>
-          {users.map((item, index) => (
-            <ChatListItem
-              key={index}
-              onClick={() => {
-                localStorage.setItem(
-                  "currentChatId",
-                  `${item.id}_${user_details?.id}`
-                );
-                localStorage.setItem("selectedRecipient", JSON.stringify(item));
-                getRecipient(item, !showChatContent);
-              }}
-            >
-              <UserListItem
-                user={{ id: item.id.toString(), name: item.name }}
-                isOnline={onlineUsers?.some((user) => user?.id === item.id)}
-                isCheckbox={false}
-              />
-            </ChatListItem>
-          ))}
-        </ChatListItemContainer>
+        <ChatListItems
+          activeTab={activeTab}
+          users={users}
+          onlineUsers={onlineUsers}
+          getRecipient={getRecipient}
+          showChatContent={showChatContent}
+          user_details={user_details}
+        />
       )}
     </ChatListContainer>
   );

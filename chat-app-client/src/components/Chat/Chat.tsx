@@ -3,6 +3,7 @@ import ChatLayout from "../../Layout/ChatRoomLayout";
 import io from "socket.io-client";
 import parseDateToTimestamp from "../../utils/dateUtils";
 import { GET_USERS } from "../../gql/queries/users/getAllUsers";
+import { GET_GROUPS } from "../../gql/queries/groupChat/getAllGroups";
 import ChatWindow from "./Modules/ChatWindow/ChatWindow";
 import ChatList from "./Modules/ChatList/ChatList";
 import { getMessagesBySenderAndRecipientId } from "../../gql/mutations/api/messages/getMessagesBySenderAndRecipientId";
@@ -41,6 +42,9 @@ export default function Chat() {
   );
 
   const { data, client: getUsersClient } = useQuery(GET_USERS);
+  // const { data: groupsData, error } = useQuery(GET_GROUPS, {
+  //   fetchPolicy: "network-only",
+  // });
 
   //get Users List
   useEffect(() => {
@@ -61,6 +65,23 @@ export default function Chat() {
     };
 
     fetchUsers();
+  }, []);
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const { data } = await client.query({
+          query: GET_GROUPS,
+          fetchPolicy: "network-only",
+        });
+
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchGroups();
   }, []);
 
   //get messages based on chat selected

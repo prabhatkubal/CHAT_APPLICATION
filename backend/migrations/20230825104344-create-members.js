@@ -23,6 +23,14 @@ module.exports = {
         defaultValue: false,
         allowNull: false,
       },
+      adminId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      adminName: {
+        type: DataTypes.STRING(200),
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

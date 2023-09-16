@@ -11,6 +11,10 @@ const groupTypes = gql`
     updatedAt: String!
   }
 
+  extend type Query {
+    getAllGroups: GetAllGroupsResponse!
+  }
+
   extend type Mutation {
     createGroup(
       groupId: String
@@ -22,6 +26,12 @@ const groupTypes = gql`
   type CreateGroupResponse {
     message: String!
     success: Boolean!
+  }
+
+  type GetAllGroupsResponse {
+    success: Boolean!
+    groups: [Group!]
+    message: String
   }
 `;
 

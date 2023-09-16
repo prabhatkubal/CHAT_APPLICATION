@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
 const { customMiddleware } = require("./src/middlewares");
+const getUserFromToken = require("./src/helpers/getUserFromToken");
 
 const BACKEND_PORT = process.env.PORT || 4000;
 
@@ -23,14 +24,14 @@ async function startApolloServer() {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req, res }) => ({ req, res }),
-    // context: async ({ req }) => {
-    //   // Get the user object from the token using your authentication logic
-    //   const user = await getUserFromToken(req);
+    // context: async ({ req, res }) => ({ req, res }),
+    context: async ({ req }) => {
+      // Get the user object from the token using your authentication logic
+      const user = await getUserFromToken(req);
 
-    //   // Attach the user object to the context along with the req and res objects
-    //   return { user, req, res: req.res };
-    // },
+      // Attach the user object to the context along with the req and res objects
+      return { user, req, res: req.res };
+    },
   });
 
   await server.start();

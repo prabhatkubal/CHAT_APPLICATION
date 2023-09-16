@@ -6,6 +6,8 @@ const memberTypes = gql`
     groupId: String!
     userId: Int!
     isAdmin: Boolean!
+    adminId: Int!
+    adminName: String
     user: User!
     group: Group!
     createdAt: String!
@@ -13,7 +15,13 @@ const memberTypes = gql`
   }
 
   extend type Mutation {
-    addMemberToGroup(groupId: String!, userId: Int!): AddMemberToGroupResponse!
+    addMemberToGroup(
+      groupId: String!
+      userId: Int!
+      isAdmin: Boolean
+      adminId: Int!
+      adminName: String
+    ): AddMemberToGroupResponse!
   }
 
   type AddMemberToGroupResponse {
