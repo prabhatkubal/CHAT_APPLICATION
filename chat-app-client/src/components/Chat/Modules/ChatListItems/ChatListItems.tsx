@@ -34,7 +34,9 @@ const ChatListItems = ({
 }) => {
   return (
     <ChatListItemContainer>
-      {activeTab === "Group Chat" ? <ChatListItemContainer>Group Chat</ChatListItemContainer> : null}
+      {activeTab === "Group Chat" ? (
+        <ChatListItemContainer>Group Chat</ChatListItemContainer>
+      ) : null}
       <React.Fragment></React.Fragment>
       {users.map((item, index) => (
         <ChatListItem
@@ -50,6 +52,8 @@ const ChatListItems = ({
         >
           <UserListItem
             user={{ id: item.id.toString(), name: item.name }}
+            userIconSize={"sm"}
+            userNameFont={"sm"}
             isOnline={onlineUsers?.some((user) => user?.id === item.id)}
             isCheckbox={false}
           />

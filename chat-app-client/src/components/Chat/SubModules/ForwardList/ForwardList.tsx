@@ -42,6 +42,7 @@ const ForwardList = ({ users, onCancel }) => {
       <PopupContent>
         <CloseButton onClick={onCancel}>X</CloseButton>
         <Search
+          borderRadius={true}
           value={searchQuery}
           placeholder="Search"
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -52,6 +53,8 @@ const ForwardList = ({ users, onCancel }) => {
               key={user.id}
               user={{ id: user.id.toString(), name: user.name }}
               // Add checkbox and handle its state here
+              userIconSize={"sm"}
+              userNameFont={"sm"}
               isOnline={false} // Modify based on user's online status
               isCheckbox={true}
             />

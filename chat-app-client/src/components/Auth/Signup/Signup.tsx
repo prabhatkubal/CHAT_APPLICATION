@@ -12,6 +12,7 @@ import Button from "../../../components/Common/Button";
 import InfoMessage from "../../Common/InfoMessage";
 import { useMutation } from "@apollo/client";
 import { SIGNUP_USER } from "../../../gql/mutations/auth/signupUser";
+import { Login } from "../../../constants/paths";
 
 interface SignupState {
   name: string;
@@ -56,7 +57,7 @@ export default function Signup() {
         if (data.success) {
           // Signup successful, redirect to login with success message
           router.push({
-            pathname: "/account/login",
+            pathname: Login,
             query: {
               message: "You have successfully registered. Please login.",
             },

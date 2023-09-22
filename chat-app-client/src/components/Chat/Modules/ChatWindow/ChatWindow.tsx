@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
 import Search from "../../../Common/Search";
 import Button from "../../../Common/Button";
-import { BiLeftArrowAlt } from "react-icons/bi";
 import { groupMessagesByDate } from "../../../../utils/dateUtils";
 import {
   ChatWindowProps,
@@ -10,7 +8,7 @@ import {
   Messages,
   MessageData,
   Recipient,
-} from "./interfaces";
+} from "./Interface";
 import {
   ChatWindowContainer,
   ChatHeaderContainer,
@@ -29,6 +27,8 @@ import UserListItem from "../../SubModules/UserListItem/UserListItem";
 import ForwardList from "../../SubModules/ForwardList/ForwardList";
 import ChatMessageOptions from "../../SubModules/ChatMessageOptions/ChatMessageOptions";
 import DeleteMessage from "../../SubModules/DeleteMessage/DeleteMessage";
+import { BackArrow } from "../../../../constants/Icons/Icons";
+import { user_details } from "../../../../utils/getUserDetails";
 
 const DateDividerWithLine = ({ date }) => {
   return (
@@ -71,11 +71,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   const [deletePopupVisibility, setDeletePopupVisibility] = useState(false);
 
   const [hydrated, setHydrated] = useState(false);
-
-  const user_details =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("user_details"))
-      : null;
 
   useEffect(() => {
     setHydrated(true);
@@ -210,7 +205,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   return (
     <ChatWindowContainer ref={chatWindowRef}>
       <ChatHeaderContainer>
-        <BiLeftArrowAlt
+        <BackArrow
           onClick={chatExit}
           style={{ cursor: "pointer" }}
           size={28}
@@ -219,6 +214,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
           <UserListItem
             user={{ id: recipient?.id.toString(), name: recipient?.name }}
             // isOnline={onlineUsers?.some((user) => user?.userId === "16")}
+            userIconSize={"sm"}
+            userNameFont={"sm"}
             isOnline={null}
             isCheckbox={false}
           />

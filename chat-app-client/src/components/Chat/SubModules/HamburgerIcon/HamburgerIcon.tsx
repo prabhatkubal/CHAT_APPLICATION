@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Button from "../../../Common/Button";
 import { useRouter } from "next/router";
@@ -6,6 +6,9 @@ import Switch from "../../../Common/SwitchToggle";
 import { useToggleTheme } from "../../../../theme/themeUtilis";
 import { LOGOUT_USER } from "../../../../gql/mutations/auth/logoutUser";
 import { useMutation } from "@apollo/client";
+import UserListItem from "../UserListItem/UserListItem";
+import { Settings } from "../../../../constants/paths";
+import { user_details } from "../../../../utils/getUserDetails";
 
 const Hamburger = styled.div``;
 
@@ -98,10 +101,15 @@ const HamburgerMenuIcon = ({
   onOutsideClick: () => void;
 }) => {
   const router = useRouter();
+  const [hydrated, setHydrated] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const { toggleTheme } = useToggleTheme();
   const [logoutuser, { loading: loginLoading, error: loginError }] =
     useMutation(LOGOUT_USER);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   const handleSwitchToggle = () => {
     toggleTheme();
@@ -125,6 +133,19 @@ const HamburgerMenuIcon = ({
     }
   };
 
+  const SettingsMenuItem = () => {
+    const handleSettingsClick = () => {
+      // Navigate to the /settings page
+      router.push(Settings);
+    };
+
+    return (
+      <HamburgerMenuItem onClick={handleSettingsClick}>
+        Settings
+      </HamburgerMenuItem>
+    );
+  };
+
   return (
     <Hamburger>
       <HamburgerIcon className={isOpen ? "open" : ""} onClick={onClick}>
@@ -133,8 +154,20 @@ const HamburgerMenuIcon = ({
         <div></div>
       </HamburgerIcon>
       <HamburgerMenu className={isOpen ? "open" : ""}>
+        {hydrated && (
+          <UserListItem
+            user={{
+              id: user_details?.id?.toString(),
+              name: user_details?.name,
+            }}
+            userIconSize={"sm"}
+            userNameFont={"sm"}
+            isOnline={true}
+            isCheckbox={false}
+          />
+        )}
         <HamburgerMenuItem>Saved Messages</HamburgerMenuItem>
-        <HamburgerMenuItem>Settings</HamburgerMenuItem>
+        <SettingsMenuItem />
         <HamburgerMenuItem>
           <Switch
             isChecked={isChecked}

@@ -13,7 +13,15 @@ module.exports = {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      name: {
+      firstname: {
+        type: DataTypes.STRING(200),
+        allowNull: false,
+      },
+      lastname: {
+        type: DataTypes.STRING(200),
+        allowNull: false,
+      },
+      username: {
         type: DataTypes.STRING(200),
         allowNull: false,
       },

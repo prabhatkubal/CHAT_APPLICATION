@@ -8,6 +8,8 @@ interface User {
 
 interface UserListItemProps {
   user: User;
+  userIconSize: string;
+  userNameFont: string;
   isOnline: boolean;
   isCheckbox: boolean;
 }
@@ -17,11 +19,13 @@ const UserListItemContainer = styled.div`
   width: 100%;
 `;
 
-const UserIcon = styled.div`
+const UserIcon = styled.div<{ userIconSize: string }>`
   margin: 0;
   background: linear-gradient(91deg, #579aca, #2d538e);
-  height: 40px;
-  width: 40px;
+  height: ${({ userIconSize }) => (userIconSize === "sm" ? "40px" : "70px")};
+  width: ${({ userIconSize }) => (userIconSize === "sm" ? "40px" : "70px")};
+  font-size: ${({ userIconSize }) =>
+    userIconSize === "sm" ? "initial" : "40px"};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,8 +35,9 @@ const UserIcon = styled.div`
   color: white;
 `;
 
-const UserName = styled.div`
-  /* Add your styling for the user name */
+const UserName = styled.div<{ userNameFont: string }>`
+  font-size: ${({ userNameFont }) =>
+    userNameFont === "sm" ? "initial" : "25px"};
 `;
 
 const Checkbox = styled.input`
@@ -59,6 +64,8 @@ const UserListItem: React.FC<UserListItemProps> = ({
   user,
   isOnline,
   isCheckbox = false,
+  userIconSize = "sm",
+  userNameFont = "sm",
 }) => {
   // const selectedUser =
   //   typeof window !== "undefined"
@@ -67,8 +74,10 @@ const UserListItem: React.FC<UserListItemProps> = ({
 
   return (
     <UserListItemContainer>
-      <UserIcon>{user?.name?.charAt(0)?.toUpperCase()}</UserIcon>
-      <UserName>{user?.name}</UserName>
+      <UserIcon userIconSize={userIconSize}>
+        {user?.name?.charAt(0)?.toUpperCase()}
+      </UserIcon>
+      <UserName userNameFont={userNameFont}>{user?.name}</UserName>
       {isCheckbox && <Checkbox type="checkbox" />}
       {/* <LastOnline>Last Online Recently</LastOnline> */}
       <OnlineIdentifier isOnline={isOnline} />

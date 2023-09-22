@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import UserListItem from "../../../SubModules/UserListItem/UserListItem";
+import { Chat } from "../../../../../constants/paths";
+import { user_details } from "../../../../../utils/getUserDetails";
 
 const ChatListItem = styled.div`
   position: relative;
@@ -28,10 +30,6 @@ const ChatListItemContainer = styled.div`
 const NormalChat = ({ users, onlineUsers, getRecipient, showChatContent }) => {
   const router = useRouter();
 
-  const user_details =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("user_details"))
-      : null;
   const isAuthorized =
     typeof window !== "undefined"
       ? JSON.parse(localStorage.getItem("isAuthorised"))
@@ -40,7 +38,7 @@ const NormalChat = ({ users, onlineUsers, getRecipient, showChatContent }) => {
   useEffect(() => {
     isAuthorized !== "true"
       ? router.push({
-          pathname: "/chat",
+          pathname: Chat,
         })
       : null;
   }, []);
@@ -61,6 +59,8 @@ const NormalChat = ({ users, onlineUsers, getRecipient, showChatContent }) => {
         >
           <UserListItem
             user={{ id: item.id.toString(), name: item.name }}
+            userIconSize={"sm"}
+            userNameFont={"sm"}
             isOnline={onlineUsers?.some((user) => user?.id === item.id)}
             isCheckbox={false}
           />

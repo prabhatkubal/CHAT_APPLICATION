@@ -15,6 +15,7 @@ import apiInstance from "../../../services/apiInstance";
 import { LOGIN_USER } from "../../../gql/mutations/auth/loginUser";
 import { useMutation } from "@apollo/client";
 import client from "../../../services/apiInstance";
+import { Chat } from "../../../constants/paths";
 
 export default function Login() {
   const [loginUser, { loading: loginLoading, error: loginError }] =
@@ -56,7 +57,7 @@ export default function Login() {
           // Signup successful, redirect to login with success message
           localStorage.setItem("isAuthorised", "true");
           router.push({
-            pathname: "/chat",
+            pathname: Chat,
           });
         } else if (!data.success && data.errors) {
           // Handle the error response
