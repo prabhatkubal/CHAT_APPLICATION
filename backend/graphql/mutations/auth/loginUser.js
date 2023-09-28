@@ -71,7 +71,9 @@ const loginUser = {
           success: true,
           user: {
             id: user.id,
-            name: user.name,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            username: user.username,
             email: user.email,
           },
         };

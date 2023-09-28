@@ -11,7 +11,7 @@ import { storeMessage } from "../../gql/mutations/api/messages/storeMessages";
 import socketCredentials from "../../helpers/socketCredentials";
 import client from "../../services/apiInstance";
 import { useQuery } from "@apollo/client";
-import { user_details } from "../../utils/getUserDetails";
+// import { user_details } from "../../utils/getUserDetails";
 
 interface User {
   id: number;
@@ -20,6 +20,9 @@ interface User {
 }
 
 export default function Chat() {
+  const user_details = typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("user_details"))
+      : null;
   const selectedRecipient =
     typeof window !== "undefined"
       ? JSON.parse(localStorage.getItem("selectedRecipient"))

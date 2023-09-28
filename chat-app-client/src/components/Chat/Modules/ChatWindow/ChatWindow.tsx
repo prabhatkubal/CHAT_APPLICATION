@@ -212,7 +212,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
         />
         {hydrated && (
           <UserListItem
-            user={{ id: recipient?.id.toString(), name: recipient?.name }}
+            user={{ id: recipient?.id.toString(), firstname: recipient?.firstname, lastname: recipient?.lastname }}
             // isOnline={onlineUsers?.some((user) => user?.userId === "16")}
             userIconSize={"sm"}
             userNameFont={"sm"}

@@ -1,9 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
 
 interface User {
   id: string;
-  name: string;
+  firstname: string;
+  lastname: string;
 }
 
 interface UserListItemProps {
@@ -72,12 +74,18 @@ const UserListItem: React.FC<UserListItemProps> = ({
   //     ? JSON.parse(localStorage.getItem("selectedUser"))
   //     : null;
 
+  console.log(user);
+
   return (
     <UserListItemContainer>
       <UserIcon userIconSize={userIconSize}>
-        {user?.name?.charAt(0)?.toUpperCase()}
+        {user?.firstname?.charAt(0)?.toUpperCase()}
+        {user?.lastname?.charAt(0)?.toUpperCase()}
       </UserIcon>
-      <UserName userNameFont={userNameFont}>{user?.name}</UserName>
+      <UserName userNameFont={userNameFont}>
+        {capitalizeFirstLetter(user?.firstname)}{" "}
+        {capitalizeFirstLetter(user?.lastname)}
+      </UserName>
       {isCheckbox && <Checkbox type="checkbox" />}
       {/* <LastOnline>Last Online Recently</LastOnline> */}
       <OnlineIdentifier isOnline={isOnline} />

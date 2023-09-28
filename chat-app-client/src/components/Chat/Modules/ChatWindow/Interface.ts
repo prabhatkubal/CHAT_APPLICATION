@@ -16,7 +16,8 @@ export interface Messages {
 
 export interface Recipient {
   id: string;
-  name: string;
+  firstname: string;
+  lastname: string;
 }
 
 export interface ChatWindowProps {

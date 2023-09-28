@@ -4,12 +4,21 @@ const { User } = require("../../../models");
 
 const signupUser = {
   Mutation: {
-    signup: async (_, { uuid, name, email, password, confirmPassword }) => {
+    signup: async (
+      _,
+      { uuid, firstname, lastname, email, password, confirmPassword }
+    ) => {
       try {
         // Validate inputs
         let errors = {};
 
-        if (!name || !email || !password || !confirmPassword) {
+        if (
+          !firstname ||
+          !lastname ||
+          !email ||
+          !password ||
+          !confirmPassword
+        ) {
           errors.message = "Please enter all fields";
         } else if (password.length < 6) {
           errors.message = "Password is too short";
@@ -40,8 +49,10 @@ const signupUser = {
 
         const newUser = await User.create({
           uuid,
-          name,
+          firstname,
+          lastname,
           email,
+          username: `${firstname}${lastname}`,
           password: hashedPassword,
         });
 
@@ -52,7 +63,9 @@ const signupUser = {
           success: true,
           user: {
             id: newUser.id,
-            name: newUser.name,
+            firstname: newUser.firstname,
+            lastname: newUser.lastname,
+            username: newUser.username,
             email: newUser.email,
           },
         };

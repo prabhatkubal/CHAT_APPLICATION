@@ -4,7 +4,9 @@ const userTypes = gql`
   type User {
     id: ID!
     uuid: String
-    name: String!
+    firstname: String!
+    lastname: String!
+    username: String!
     email: String!
     password: String!
     accessToken: String
@@ -23,7 +25,9 @@ const userTypes = gql`
 
     signup(
       uuid: String
-      name: String!
+      firstname: String!
+      lastname: String!
+      username: String
       email: String!
       password: String!
       confirmPassword: String!

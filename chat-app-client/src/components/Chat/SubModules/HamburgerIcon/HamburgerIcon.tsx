@@ -8,7 +8,7 @@ import { LOGOUT_USER } from "../../../../gql/mutations/auth/logoutUser";
 import { useMutation } from "@apollo/client";
 import UserListItem from "../UserListItem/UserListItem";
 import { Settings } from "../../../../constants/paths";
-import { user_details } from "../../../../utils/getUserDetails";
+// import { user_details } from "../../../../utils/getUserDetails";
 
 const Hamburger = styled.div``;
 
@@ -100,6 +100,9 @@ const HamburgerMenuIcon = ({
   onToggleTheme: () => void;
   onOutsideClick: () => void;
 }) => {
+  const user_details = typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("user_details"))
+      : null;
   const router = useRouter();
   const [hydrated, setHydrated] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -158,7 +161,8 @@ const HamburgerMenuIcon = ({
           <UserListItem
             user={{
               id: user_details?.id?.toString(),
-              name: user_details?.name,
+              firstname: user_details?.firstname,
+              lastname: user_details?.lastname
             }}
             userIconSize={"sm"}
             userNameFont={"sm"}

@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import {
@@ -15,7 +15,8 @@ import { SIGNUP_USER } from "../../../gql/mutations/auth/signupUser";
 import { Login } from "../../../constants/paths";
 
 interface SignupState {
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -28,7 +29,8 @@ export default function Signup() {
   const [message, setMessage] = useState<string | null>(null);
 
   const [state, setState] = useState<SignupState>({
-    name: "",
+    firstname: "",
+    lastname: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -80,9 +82,16 @@ export default function Signup() {
         {message && <InfoMessage message={message} />}
         <Input
           type="text"
-          name="name"
-          placeholder="Enter your Name"
-          value={state.name}
+          name="firstname"
+          placeholder="Enter your first name"
+          value={state.firstname}
+          onChange={(e) => handleInputChange(e)}
+        />
+        <Input
+          type="text"
+          name="lastname"
+          placeholder="Enter your last name"
+          value={state.lastname}
           onChange={(e) => handleInputChange(e)}
         />
         <Input
