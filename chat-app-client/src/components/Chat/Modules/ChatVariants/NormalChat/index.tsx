@@ -58,7 +58,11 @@ const NormalChat = ({ users, onlineUsers, getRecipient, showChatContent }) => {
           }}
         >
           <UserListItem
-            user={{ id: item.id.toString(), name: item.name }}
+            user={{
+              id: item.id.toString(),
+              firstname: item.firstname,
+              lastname: item.lastname,
+            }}
             userIconSize={"sm"}
             userNameFont={"sm"}
             isOnline={onlineUsers?.some((user) => user?.id === item.id)}

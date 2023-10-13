@@ -51,7 +51,11 @@ const ForwardList = ({ users, onCancel }) => {
           <ForwardListItemContainer>
             <UserListItem
               key={user.id}
-              user={{ id: user.id.toString(), name: user.name }}
+              user={{
+                id: user.id.toString(),
+                firstname: user.name,
+                lastname: user.lastname,
+              }}
               // Add checkbox and handle its state here
               userIconSize={"sm"}
               userNameFont={"sm"}
